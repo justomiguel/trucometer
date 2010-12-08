@@ -26,8 +26,6 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
 
     // main image
     private Image mainTitle = null;
-    // an ok image to move around the menu
-    private Image select = null;
     // the midlet instance
     public GameMidlet midletInstance;
     // an int to know the current selection
@@ -36,9 +34,6 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     private GameCounterCanvas gameCanvas;
     // preferences
     private Preferences preferences;
-    // the x,y initial coordinates for the ok image
-    private int selectImgX = 40;
-    private int selectImgY = 145;
     // if the phone is a touch one this var is going to be true
     private boolean isTactil;
     //manager for the animations
@@ -55,8 +50,8 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         midletInstance = inst;
         isTactil = hasPointerEvents();
         interrupted = false;
-        setAnimations();
         defineModel();
+        setAnimations();
         getImages();
     }
 
@@ -112,8 +107,6 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         }
        // dibujo la imagen del titulo
        g.drawImage(mainTitle, mobile.m_titlePosition.x, mobile.m_titlePosition.y, Graphics.TOP | Graphics.LEFT);
-       // dibujo seleccionador
-       if (!isTactil) g.drawImage(select, mobile.m_stringsPosition[selectedOption-1].x - select.getWidth(), mobile.m_stringsPosition[selectedOption-1].y, Graphics.TOP | Graphics.LEFT);
        // seteo fuente
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE));
         // dibujo Strings
@@ -136,7 +129,6 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     private void getImages() {
         try {
             mainTitle = Image.createImage(mobile.m_titlePosition.name);
-            select = Image.createImage("/select.png");
         } catch (IOException ex) {
             System.out.println("No carga imagen");
         }
@@ -216,6 +208,9 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         letrero = new Marquesina("TrucoMeter para mobiles -- Beta Version", 1, 0);
         timer = new Timer();
         timer.scheduleAtFixedRate(letrero, 0, 40);
+        // for default select the first option
+        Item object = mobile.m_botones[0];
+        object.seleccionado = true;
     }
 
     private void defineModel() {
@@ -223,7 +218,6 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         int alto = this.getHeight();
         if ((alto <= 322)&&(ancho <= 245)){
             mobile = new N320x240();
-           // mobile = new Nokia5800();
         } else if ((alto <= 647)&&(ancho <= 365)){
             mobile = new N640x360();
         }

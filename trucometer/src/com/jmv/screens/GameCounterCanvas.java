@@ -4,12 +4,12 @@
  */
 package com.jmv.screens;
 
-import com.jmv.GameMidlet;
 import com.jmv.models.Phone;
 import com.jmv.settings.Settings;
 import com.jmv.uicomponents.Fosforos;
 import com.jmv.uicomponents.Marquesina;
 import com.jmv.utils.IDestroyable;
+import com.jmv.utils.ImageUtil;
 import com.jmv.utils.Item;
 import java.io.IOException;
 import java.util.Timer;
@@ -47,14 +47,19 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     // my ticker
     private Marquesina letrero;
     private boolean interrupted = false;
+    private boolean isTactil;
+    private Image mainBackGround;
 
     public GameCounterCanvas(Preferences inst) {
         setFullScreenMode(true);
         setTitle("Truco Meter");
         mobile = inst.backScreen.mobile;
+        isTactil = hasPointerEvents();
         init(inst);
         try {
             mainTitle = Image.createImage(mobile.g_titlePosition.name);
+            mainBackGround = Image.createImage(mobile.backGround);
+            mainBackGround = ImageUtil.resizeImage(mainBackGround, this.getWidth(), this.getHeight());
         } catch (IOException ex) {
         }
 
@@ -135,20 +140,20 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         g.setColor(0x08610D);
         g.drawRect(0, 0, this.getWidth(), this.getHeight());
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.drawImage(mainBackGround, 0, 0, Graphics.TOP | Graphics.LEFT);
         g.setColor(0x000000);
         Item object;
         //g.drawImage(background, 0, 0, Graphics.TOP | Graphics.LEFT);
         // dibujo recuadros interiores
-        if (hasPointerEvents()) {
+        if (isTactil) {
             for (int i = 0; i < mobile.g_botones.length; i++) {
                 object = mobile.g_botones[i];
                 if (object.seleccionado) {
                     g.setColor(object.colorSeleccionado);
-                } else {
-                    g.setColor(object.color);
+                    g.fillRect(object.x, object.y, object.ancho, object.largo);
                 }
 
-                g.fillRect(object.x, object.y, object.ancho, object.largo);
+                
                 g.setColor(0xFFFFFF);
                 g.drawRect(object.x, object.y, object.ancho, object.largo);
                 if (i % 2 == 0) {
@@ -180,7 +185,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         g.drawString(nombreTeamUsr, mobile.g_stringsPosition[1].x, mobile.g_stringsPosition[1].y, Graphics.TOP | Graphics.LEFT);
         g.drawString(nombreTeamRival, mobile.g_stringsPosition[2].x, mobile.g_stringsPosition[2].y, Graphics.TOP | Graphics.LEFT);
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_SMALL));
-        g.drawString("Atras", 3, this.getHeight() - 40, Graphics.TOP | Graphics.LEFT);
+        g.drawString("Atras", 3, this.getHeight() - 20, Graphics.TOP | Graphics.LEFT);
 
     }
 
@@ -316,10 +321,10 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 num = j + 1;
                 if (num % 5 == 0) {
                     // digbuja diagonales
-                    g.drawImage(img, initialX + 9, initialY + 7, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + 6, initialY + 5, Graphics.TOP | Graphics.LEFT);
                 } else if (num % 2 == 0) {
                     // dibuja
-                    g.drawImage(img, initialX + 9, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
                     DOWNcounter++;
                     if (DOWNcounter == 2) {
                         DOWNcounter = 0;
@@ -327,7 +332,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 } else {
                     // hago la gilada esta por que empiezo al reves por eso ... :S
                     int k = ((i % 2) != 0) ? i - 1 : i;
-                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 9, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 4, Graphics.TOP | Graphics.LEFT);
                     UPcounter++;
                     if (UPcounter == 2) {
                         UPcounter = 0;
@@ -351,11 +356,13 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         for (int j = 0; j < tantoRival; j++) {
             Image img = fosforosRival[j].getImg();
             if ((fosforosRival[j].isOn())) {
-                num = j + 1;
+                     num = j + 1;
                 if (num % 5 == 0) {
-                    g.drawImage(img, initialX + 9, initialY + 7, Graphics.TOP | Graphics.LEFT);
+                    // digbuja diagonales
+                    g.drawImage(img, initialX + 6, initialY + 5, Graphics.TOP | Graphics.LEFT);
                 } else if (num % 2 == 0) {
-                    g.drawImage(img, initialX + 9, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
+                    // dibuja
+                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
                     DOWNcounter++;
                     if (DOWNcounter == 2) {
                         DOWNcounter = 0;
@@ -363,7 +370,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 } else {
                     // hago la gilada esta por que empiezo al reves por eso ... :S
                     int k = ((i % 2) != 0) ? i - 1 : i;
-                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 9, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 4, Graphics.TOP | Graphics.LEFT);
                     UPcounter++;
                     if (UPcounter == 2) {
                         UPcounter = 0;
