@@ -24,7 +24,7 @@ public class N320x240 extends Phone {
         fosforoDOWN = "/down.png";
         fosforoUP = "/up.png";
         separate = 12;
-
+        backGround = "/gameBackground320.png";
 
     }
 
