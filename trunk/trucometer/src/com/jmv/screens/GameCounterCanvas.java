@@ -20,6 +20,7 @@ import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import javax.microedition.lcdui.game.Sprite;
 
 /**
  *
@@ -59,7 +60,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         try {
             mainTitle = Image.createImage(mobile.g_titlePosition.name);
             mainBackGround = Image.createImage(mobile.backGround);
-            mainBackGround = ImageUtil.resizeImage(mainBackGround, this.getWidth(), this.getHeight());
+            mainBackGround = Image.createImage(mainBackGround,0,0, this.getWidth(), this.getHeight(),Sprite.TRANS_NONE);
         } catch (IOException ex) {
         }
 
