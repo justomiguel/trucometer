@@ -17,11 +17,8 @@ public abstract class Phone {
     public int ancho;
 
     public Item m_titlePosition;
-
     public Item[] m_linesPosition;
-    
     public Item[] m_stringsPosition;
-
     public Item[] m_botones;
 
 
@@ -39,6 +36,11 @@ public abstract class Phone {
 
     public int separate;
 
+    public int fosforoWidth;
+    public int fosforoHeight;
+
+    public String backGround;
+
     public Item[] g_fosForosPositionUnder;
 
     public Phone() {
@@ -51,31 +53,20 @@ public abstract class Phone {
         g_titlePosition = getGMainTitle();
         g_botones = getGButtonsPosition();
         g_fosForosPositionUnder = getFosforosPositionUnder();
+        backGround = "/gameBackground.png";
 
     }
 
+    
     protected abstract Item[] getLinesPosition();
     protected abstract Item[] getStringsPosition();
     protected abstract Item getMainTitle();
     protected abstract Item[] getButtonsPosition();
 
-    protected Item[] getGLinesPosition() {
-        return null;
-    }
+    protected abstract Item[] getGLinesPosition();
+    protected abstract Item[] getGStringsPosition();
+    protected abstract Item getGMainTitle();
+    protected abstract Item[] getGButtonsPosition();
 
-    protected Item[] getGStringsPosition() {
-        return null;
-    }
-
-    protected Item getGMainTitle() {
-        return null;
-    }
-
-    protected Item[] getGButtonsPosition() {
-        return null;
-    }
-
-    protected Item[] getFosforosPositionUnder() {
-        return null;
-    }
+    protected abstract Item[] getFosforosPositionUnder();
 }

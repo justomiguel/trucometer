@@ -16,12 +16,16 @@ public class N320x240 extends Phone {
 
     public N320x240() {
         super();
-        fosforosPositionU = new Item(15, 90);
-        fosforosPositionR = new Item(135, 90);
+        fosforosPositionU = new Item(15, 94);
+        fosforosPositionR = new Item(135, 94);
+        fosforoHeight = 30;
+        fosforoWidth = 30;
         fosforoDIAG = "/diag.png";
         fosforoDOWN = "/down.png";
         fosforoUP = "/up.png";
-        separate = 10;
+        separate = 12;
+
+
     }
 
 
@@ -52,12 +56,18 @@ public class N320x240 extends Phone {
 
 
     protected Item[] getGButtonsPosition() {
-        Item[] result = {new Item(1,236,59,38,0x009900,0xCCFFCC),new Item(59,236,62,38,0x009900,0xCCFFCC), new Item(121,236,59,38,0x009900,0xCCFFCC),new Item(178,236,62,38,0x009900,0xCCFFCC)};
+        Item[] result = {new Item(1,244,59,38,0x009900,0xFFFF99),new Item(59,244,62,38,0x009900,0xFFFF99), new Item(121,244,59,38,0x009900,0xFFFF99),new Item(178,244,62,38,0x009900,0xFFFF99)};
         return result;
     }
 
     protected Item[] getGLinesPosition() {
-        Item[] result = {new Item(120,59,266),new Item(0,42,240),new Item(0,59,240),new Item(0,79,240), new Item(0,232,240), new Item(0,236,240),new Item(0,275,240),new Item(0,278,240)};
+        Item[] result = {
+            // the vertical line
+            new Item(120,59,266),
+            // the horizontal lines
+            new Item(0,42,240),new Item(0,59,240),new Item(0,81,240),
+            // comienzan laslineas de abajo
+            new Item(0,240,240), new Item(0,244,240),new Item(0,283,240),new Item(0,286,240)};
         return result;
     }
 
@@ -71,7 +81,8 @@ public class N320x240 extends Phone {
     }
 
     protected Item[] getFosforosPositionUnder() {
-        Item[] result = {new Item(29,34)};
+        // the distance between the fosforos
+        Item[] result = {new Item(42,42)};
         return result;
     }
 
