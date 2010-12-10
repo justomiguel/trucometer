@@ -116,7 +116,7 @@ public class Preferences extends Form implements CommandListener, IDestroyable {
             Settings.configuration().setEnd_game(15);
             Settings.configuration().setRivalTeam(textFieldRIVAL.getString());
             Settings.configuration().setUsrTeam(textFieldUSR.getString());
-            this.gameCanvas = new GameCounterCanvas(this);
+            ///this.gameCanvas = new GameCounterCanvas(this);
             this.t = new Thread(gameCanvas);
            t.start();
             midlet.d.setCurrent(gameCanvas);

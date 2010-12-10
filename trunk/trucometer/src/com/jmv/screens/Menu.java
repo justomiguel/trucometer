@@ -7,8 +7,12 @@ package com.jmv.screens;
 import com.jmv.GameMidlet;
 import com.jmv.models.screenstyles.touch.N640x360;
 import com.jmv.models.Phone;
-import com.jmv.models.screenstyles.generic.N320x240;
+import com.jmv.models.screenstyles.generic.NG320x240;
+import com.jmv.models.screenstyles.touch.NT320x240;
+import com.jmv.uicomponents.canvas.CanvasLine;
 import com.jmv.uicomponents.Marquesina;
+import com.jmv.uicomponents.buttons.UIButton;
+import com.jmv.uicomponents.canvas.CanvasString;
 import com.jmv.utils.IDestroyable;
 import com.jmv.utils.Item;
 import java.io.IOException;
@@ -33,7 +37,8 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     // the game to lunch
     private GameCounterCanvas gameCanvas;
     // preferences
-    private Preferences preferences;
+    //private Preferences preferences;
+    private UIOptions preferences;
     // if the phone is a touch one this var is going to be true
     private boolean isTactil;
     //manager for the animations
@@ -56,13 +61,13 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     }
 
     protected void pointerPressed(int x, int y) {
-        if (x>=mobile.m_botones[0].x && x<=mobile.m_botones[0].ancho){
-            if (y>=mobile.m_botones[0].y && y<= (mobile.m_botones[0].y+mobile.m_botones[0].largo)){
+        if (x>=mobile.menu_botones[0].x && x<=mobile.menu_botones[0].ancho){
+            if (y>=mobile.menu_botones[0].y && y<= (mobile.menu_botones[0].y+mobile.menu_botones[0].largo)){
                 //lamo al juego
-                mobile.m_botones[0].seleccionado = true;
+                mobile.menu_botones[0].seleccionado = true;
                 repaint();
-            } else if (y>=mobile.m_botones[2].y && y<= (mobile.m_botones[2].y+mobile.m_botones[2].largo)){
-                mobile.m_botones[2].seleccionado = true;
+            } else if (y>=mobile.menu_botones[2].y && y<= (mobile.menu_botones[2].y+mobile.menu_botones[2].largo)){
+                mobile.menu_botones[2].seleccionado = true;
                 repaint();
             }
         }
@@ -71,13 +76,14 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
 
 
     protected void pointerReleased(int x, int y) {
-        if (x>=mobile.m_botones[0].x && x<=mobile.m_botones[0].ancho){
-            if (y>=mobile.m_botones[0].y && y<= (mobile.m_botones[0].y+mobile.m_botones[0].largo)){
+        if (x>=mobile.menu_botones[0].x && x<=mobile.menu_botones[0].ancho){
+            if (y>=mobile.menu_botones[0].y && y<= (mobile.menu_botones[0].y+mobile.menu_botones[0].largo)){
                 //lamo al juego
-                preferences = new Preferences(this, midletInstance);
+                //preferences = new Preferences(this, midletInstance);
+                preferences = new UIOptions(this, midletInstance);
                 midletInstance.d.setCurrent(preferences);
-                mobile.m_botones[0].seleccionado = false;
-            } else if (y>=mobile.m_botones[2].y && y<= (mobile.m_botones[2].y+mobile.m_botones[2].largo)){
+                mobile.menu_botones[0].seleccionado = false;
+            } else if (y>=mobile.menu_botones[2].y && y<= (mobile.menu_botones[2].y+mobile.menu_botones[2].largo)){
                 destroy();
                 midletInstance.destroyApp(true);
             }
@@ -90,14 +96,14 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
        g.fillRect(0, 0, this.getWidth(), this.getHeight());
        g.setColor(0xFFFFFF);
        // dibujo rectas
-        for (int i = 0; i < mobile.m_linesPosition.length; i++) {
-            Item object = mobile.m_linesPosition[i];
+        for (int i = 0; i < mobile.menu_linesPosition.length; i++) {
+            CanvasLine object = mobile.menu_linesPosition[i];
             g.setColor(0xFFFFFF);
             g.drawLine(object.x, object.y, object.x+object.largo, object.y);
         }
        // dibujo recuadros interiores
-       for (int i = 0; i < mobile.m_botones.length; i++) {
-            Item object = mobile.m_botones[i];
+       for (int i = 0; i < mobile.menu_botones.length; i++) {
+            UIButton object = mobile.menu_botones[i];
             if (object.seleccionado){
                 g.setColor(object.colorSeleccionado);
             } else {
@@ -106,13 +112,13 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
             g.fillRect(object.x, object.y, object.ancho, object.largo);
         }
        // dibujo la imagen del titulo
-       g.drawImage(mainTitle, mobile.m_titlePosition.x, mobile.m_titlePosition.y, Graphics.TOP | Graphics.LEFT);
+       g.drawImage(mainTitle, mobile.menu_titlePosition.x, mobile.menu_titlePosition.y, Graphics.TOP | Graphics.LEFT);
        // seteo fuente
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_LARGE));
         // dibujo Strings
         g.setColor(0xFFFFFF);
-        for (int i = 0; i < mobile.m_stringsPosition.length; i++) {
-            Item object = mobile.m_stringsPosition[i];
+        for (int i = 0; i < mobile.menu_stringsPosition.length; i++) {
+            CanvasString object = mobile.menu_stringsPosition[i];
             g.drawString(object.name, object.x, object.y, Graphics.TOP | Graphics.LEFT);
         }
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_SMALL));
@@ -120,15 +126,15 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     }
 
     public void reset(){
-         for (int i = 0; i < mobile.m_botones.length; i++) {
-            Item object = mobile.m_botones[i];
+         for (int i = 0; i < mobile.menu_botones.length; i++) {
+            UIButton object = mobile.menu_botones[i];
             object.seleccionado = false;
         }
     }
 
     private void getImages() {
         try {
-            mainTitle = Image.createImage(mobile.m_titlePosition.name);
+            mainTitle = Image.createImage(mobile.menu_titlePosition.name);
         } catch (IOException ex) {
             System.out.println("No carga imagen");
         }
@@ -141,8 +147,8 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
             case UP:
                 if (selectedOption > 1) {
                     selectedOption--;
-                     for (int i = 0; i < mobile.m_botones.length; i++) {
-                        Item object = mobile.m_botones[i];
+                     for (int i = 0; i < mobile.menu_botones.length; i++) {
+                        UIButton object = mobile.menu_botones[i];
                         if (i == selectedOption-1){
                             object.seleccionado = true;
                         } else {
@@ -154,8 +160,8 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
             case DOWN:
                 if (selectedOption < 3) {
                     selectedOption++;
-                    for (int i = 0; i < mobile.m_botones.length; i++) {
-                        Item object = mobile.m_botones[i];
+                    for (int i = 0; i < mobile.menu_botones.length; i++) {
+                        UIButton object = mobile.menu_botones[i];
                         if (i == selectedOption-1){
                             object.seleccionado = true;
                         } else {
@@ -175,7 +181,8 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     private void changeScreen() {
         switch (selectedOption) {
             case 1:
-                preferences = new Preferences(this, midletInstance);
+                //preferences = new Preferences(this, midletInstance);
+                preferences = new UIOptions(this, midletInstance);
                 midletInstance.d.setCurrent(preferences);
                 break;
             case 2:
@@ -209,7 +216,7 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         timer = new Timer();
         timer.scheduleAtFixedRate(letrero, 0, 40);
         // for default select the first option
-        Item object = mobile.m_botones[0];
+        UIButton object = mobile.menu_botones[0];
         object.seleccionado = true;
     }
 
@@ -217,7 +224,11 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         int ancho = this.getWidth();
         int alto = this.getHeight();
         if ((alto <= 322)&&(ancho <= 245)){
-            mobile = new N320x240();
+            if (isTactil){
+               // mobile = new NT320x240();
+            //} else {
+                mobile = new NG320x240();
+            }
         } else if ((alto <= 647)&&(ancho <= 365)){
             mobile = new N640x360();
         }
