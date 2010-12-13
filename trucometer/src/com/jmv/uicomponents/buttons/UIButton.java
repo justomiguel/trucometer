@@ -20,6 +20,7 @@ public class UIButton implements IScreenElement {
     public int colorSeleccionado;
     public int ancho;
     public boolean  seleccionado = false;
+    private String name;
 
     public UIButton(int x, int y, int ancho, int largo, int color, int colorSeleccionado) {
         this.x = x;
@@ -28,6 +29,16 @@ public class UIButton implements IScreenElement {
         this.color = color;
         this.colorSeleccionado = colorSeleccionado;
         this.ancho = ancho;
+    }
+
+    public UIButton(int x, int y, int ancho, int largo, int color, int colorSeleccionado, String string) {
+        this.x = x;
+        this.y = y;
+        this.largo = largo;
+        this.color = color;
+        this.colorSeleccionado = colorSeleccionado;
+        this.ancho = ancho;
+        this.name = string;
     }
 
 
