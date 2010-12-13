@@ -66,7 +66,10 @@ public class NG320x240 extends Phone {
     }
 
     protected UIButton[] getGameButtonsPosition() {
-        UIButton[] result = {};
+       UIButton[] result = {new UIButton(10,290,90,26,0x009900,0xFFFF99),
+       // separaion de canchas
+       new UIButton(10,90,100,145,0x009900,0xFFFF99),
+       new UIButton(130,90,100,145,0x009900,0xFFFF99)};
         return result;
     }
 

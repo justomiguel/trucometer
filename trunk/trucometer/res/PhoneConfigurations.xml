@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : PhoneConfigurations.xml
+    Created on : 10 de diciembre de 2010, 13:38
+    Author     : Miguel
+    Description:
+        Purpose of the document follows.
+-->
+
+<root>
+    <phones>
+        <nontouch>
+            <d320x240>
+                <options>
+                    <buttons>
+                        <uibutton x="49" y="99">
+                            <x>49</x>
+                            <y>99</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>112</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>134</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>167</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                    </buttons>
+                </options>
+            </d320x240>
+        </nontouch>
+        <touch>
+            <d320x240>
+                <options>
+                    <buttons>
+                        <uibutton>
+                            <x>49</x>
+                            <y>99</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>112</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>134</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                        <uibutton>
+                            <x>49</x>
+                            <y>167</y>
+                            <width>170</width>
+                            <height>26</height>
+                            <color>0xFFFFFF</color>
+                            <selectedcolor>0xFFFFFF</selectedcolor>
+                        </uibutton>
+                    </buttons>
+                </options>
+            </d320x240>
+        </touch>
+    </phones>
+</root>

@@ -14,11 +14,20 @@ import javax.microedition.lcdui.Image;
 public class Fosforos {
 
     private Image img;
+    private Image shadow;
     private boolean on;
 
     public Fosforos(Image img, boolean isOn) {
         this.img = img;
         this.on = isOn;
+    }
+
+    public Image getShadow() {
+        return shadow;
+    }
+
+    public void setShadow(Image shadow) {
+        this.shadow = shadow;
     }
 
     public boolean isOn() {
