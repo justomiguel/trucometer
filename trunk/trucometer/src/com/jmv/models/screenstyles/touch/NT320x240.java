@@ -75,12 +75,10 @@ public class NT320x240 extends Phone {
         return result;
     }
 
-    protected CanvasLine[] getVerticalGamesLinesPosition() {
-        CanvasLine[] result = {
-            // the horizontal lines
-            new CanvasLine(0,42,240),new CanvasLine(0,59,240),new CanvasLine(0,81,240),
-            // comienzan laslineas de abajo
-            new CanvasLine(0,240,240), new CanvasLine(0,244,240),new CanvasLine(0,283,240),new CanvasLine(0,286,240)};
+    protected int[] getVerticalGamesLinesPosition() {
+        int[] result = {13,19,
+                        // ABAJO
+                        26,75,76,89,90};
         return result;
     }
 
@@ -99,10 +97,10 @@ public class NT320x240 extends Phone {
         return result;
     }
 
-    protected CanvasLine[] getHorizontalGamesLinesPosition() {
-         CanvasLine[] result = {
-            // the vertical line
-            new CanvasLine(120,59,266)};
+    protected int[] getHorizontalGamesLinesPosition() {
+         int[] result = {13,19,
+                        // ABAJO
+                        26,75,76,89,90};
         return result;
     }
 

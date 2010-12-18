@@ -61,12 +61,12 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     }
 
     protected void pointerPressed(int x, int y) {
-        if (x>=mobile.menu_botones[0].x && x<=mobile.menu_botones[0].ancho){
-            if (y>=mobile.menu_botones[0].y && y<= (mobile.menu_botones[0].y+mobile.menu_botones[0].largo)){
+        if (x>=mobile.menu_botones[0].xPercent && x<=mobile.menu_botones[0].anchoPercent){
+            if (y>=mobile.menu_botones[0].yPercent && y<= (mobile.menu_botones[0].yPercent+mobile.menu_botones[0].largoPercent)){
                 //lamo al juego
                 mobile.menu_botones[0].seleccionado = true;
                 repaint();
-            } else if (y>=mobile.menu_botones[2].y && y<= (mobile.menu_botones[2].y+mobile.menu_botones[2].largo)){
+            } else if (y>=mobile.menu_botones[2].yPercent && y<= (mobile.menu_botones[2].yPercent+mobile.menu_botones[2].largoPercent)){
                 mobile.menu_botones[2].seleccionado = true;
                 repaint();
             }
@@ -76,14 +76,14 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
 
 
     protected void pointerReleased(int x, int y) {
-        if (x>=mobile.menu_botones[0].x && x<=mobile.menu_botones[0].ancho){
-            if (y>=mobile.menu_botones[0].y && y<= (mobile.menu_botones[0].y+mobile.menu_botones[0].largo)){
+        if (x>=mobile.menu_botones[0].xPercent && x<=mobile.menu_botones[0].anchoPercent){
+            if (y>=mobile.menu_botones[0].yPercent && y<= (mobile.menu_botones[0].yPercent+mobile.menu_botones[0].largoPercent)){
                 //lamo al juego
                 //preferences = new Preferences(this, midletInstance);
                 preferences = new UIOptions(this, midletInstance);
                 midletInstance.d.setCurrent(preferences);
                 mobile.menu_botones[0].seleccionado = false;
-            } else if (y>=mobile.menu_botones[2].y && y<= (mobile.menu_botones[2].y+mobile.menu_botones[2].largo)){
+            } else if (y>=mobile.menu_botones[2].yPercent && y<= (mobile.menu_botones[2].yPercent+mobile.menu_botones[2].largoPercent)){
                 destroy();
                 midletInstance.destroyApp(true);
             }
@@ -109,7 +109,7 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
             } else {
                 g.setColor(object.color);
             }
-            g.fillRect(object.x, object.y, object.ancho, object.largo);
+            g.fillRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
         }
        // dibujo la imagen del titulo
        g.drawImage(mainTitle, mobile.menu_titlePosition.x, mobile.menu_titlePosition.y, Graphics.TOP | Graphics.LEFT);
@@ -119,7 +119,7 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
         g.setColor(0xFFFFFF);
         for (int i = 0; i < mobile.menu_stringsPosition.length; i++) {
             CanvasString object = mobile.menu_stringsPosition[i];
-            g.drawString(object.name, object.x, object.y, Graphics.TOP | Graphics.LEFT);
+            g.drawString(object.name, object.xPercent, object.yPercent, Graphics.TOP | Graphics.LEFT);
         }
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_SMALL));
         g.drawString(letrero.getContent(), letrero.getX(), letrero.getY(), Graphics.TOP | Graphics.LEFT);
@@ -221,16 +221,10 @@ public class Menu extends Canvas implements Runnable, IDestroyable {
     }
 
     private void defineModel() {
-        int ancho = this.getWidth();
-        int alto = this.getHeight();
-        if ((alto <= 322)&&(ancho <= 245)){
-            if (isTactil){
-               // mobile = new NT320x240();
-            //} else {
+        
+  
+        
                 mobile = new NG320x240();
-            }
-        } else if ((alto <= 647)&&(ancho <= 365)){
-            mobile = new N640x360();
-        }
     }
+            
 }

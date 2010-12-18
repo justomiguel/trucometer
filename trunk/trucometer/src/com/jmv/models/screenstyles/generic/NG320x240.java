@@ -19,21 +19,20 @@ public class NG320x240 extends Phone {
 
     public NG320x240() {
         super();
-        fosforosPositionU = new Item(15, 94);
-        fosforosPositionR = new Item(135, 94);
+        fosforosPositionU = new Item(15, 86);
+        fosforosPositionR = new Item(135, 86);
 
         // revisar esto se deberia de hacer mejor
-        upFosforoHeight = 38;
-        upFosforoWidth = 3;
-        downFosforoHeight = 3;
-        downFosforoWidth = 38;
-        diagFosforoHeight = 34;
-        diagFosforoWidth = 33;
+        upFosforoHeight = 40;
+        upFosforoWidth = 4;
+        downFosforoHeight = 4;
+        downFosforoWidth = 40;
+        diagFosforoHeight = 39;
+        diagFosforoWidth = 37;
 
         fosforoDIAG = "/diag.png";
-        fosforoDOWN = "/down.png";
         fosforoUP = "/up.png";
-        separate = 12;
+        separate = 13;
         myBackGround = "/gameBackground320.png";
 
         mainTitleHeight = 39;
@@ -66,27 +65,20 @@ public class NG320x240 extends Phone {
     }
 
     protected UIButton[] getGameButtonsPosition() {
-       UIButton[] result = {new UIButton(10,290,90,26,0x009900,0xFFFF99),
+       UIButton[] result = {new UIButton(0,90,50,11,0x009900,0xFFFF99),
        // separaion de canchas
-       new UIButton(10,90,100,145,0x009900,0xFFFF99),
-       new UIButton(130,90,100,145,0x009900,0xFFFF99)};
+       new UIButton(0,26,50,50,0x009900,0xFFFF99),
+       new UIButton(50,26,50,50,0x009900,0xFFFF99)};
         return result;
     }
 
-    protected CanvasLine[] getVerticalGamesLinesPosition() {
-        CanvasLine[] result = {
-            // the vertical line
-            new CanvasLine(120, 59, 180),
-            new CanvasLine(120, 287, 37),};
+    protected int[] getVerticalGamesLinesPosition() {
+        int[] result = {19};
         return result;
     }
 
-    protected CanvasLine[] getHorizontalGamesLinesPosition() {
-        CanvasLine[] result = {
-            // the horizontal lines
-            new CanvasLine(0, 42, 240), new CanvasLine(0, 59, 240), new CanvasLine(0, 81, 240),
-            // comienzan laslineas de abajo
-            new CanvasLine(0, 240, 240), new CanvasLine(0, 244, 240), new CanvasLine(0, 283, 240), new CanvasLine(0, 286, 240)};
+    protected int[] getHorizontalGamesLinesPosition() {
+        int[] result = {13,19,26,75,76,89,90};
         return result;
     }
 
@@ -96,14 +88,15 @@ public class NG320x240 extends Phone {
 
     protected CanvasString[] getGamesStringsPosition() {
         CanvasString[] result = {
-            new CanvasString(3, 42, "Beta version"),
-            new CanvasString(7, 60, "USR"),
-            new CanvasString(125, 60, "Rival"),
+            new CanvasString(0, 14, "Beta version"),
+            new CanvasString(4, 20, "USR"),
+            new CanvasString(53, 20, "Rival"),
             //string de abajo
-            new CanvasString(12, 255, "Partidos"),
+            new CanvasString(6, 80, "Partidos"),
             // contador de partido
-            new CanvasString(130, 245, "usr"),
-            new CanvasString(130, 265, "rival")};
+            new CanvasString(55, 77, "usr"),
+            new CanvasString(55, 83, "rival"),
+            new CanvasString(17, 93, "Atras")};
         return result;
     }
 
@@ -116,10 +109,10 @@ public class NG320x240 extends Phone {
     protected UIButton[] getOptionsButtons() {
         // the textfields on the screen
         UIButton[] result = {
-            new UIButton(49, 99, 170, 26, 0xFFFFFF, 0xFFFFFF),
-            new UIButton(49, 170, 170, 26, 0xFFFFFF, 0xFFFFFF),
-            new UIButton(0, 293, 120, 27, 0xFFFFFF, 0x733213),
-            new UIButton(120, 293, 120, 27, 0xFFFFFF, 0x733213)
+            new UIButton(21, 32, 71, 8, 0xFFFFFF, 0xFFFFFF),
+            new UIButton(21, 53, 71, 8, 0xFFFFFF, 0xFFFFFF),
+            new UIButton(0, 92, 50, 8, 0xFFFFFF, 0x733213),
+            new UIButton(50, 92, 50, 8, 0xFFFFFF, 0x733213)
         };
         return result;
     }
@@ -130,8 +123,8 @@ public class NG320x240 extends Phone {
 
     protected CanvasString[] getOptionsStrings() {
         CanvasString[] result = {
-            new CanvasString(3, 42, "teamUsr"),
-            new CanvasString(7, 60, "teamRival"),
+            new CanvasString(44, 33, "teamUsr"),
+            new CanvasString(44, 55, "teamRival"),
         };
         return result;
     }
