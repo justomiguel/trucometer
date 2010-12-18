@@ -13,31 +13,31 @@ import com.jmv.uicomponents.IScreenElement;
  */
 public class UIButton implements IScreenElement {
 
-    public int x;
-    public int y;
-    public int largo;
+    public int xPercent;
+    public int yPercent;
+    public int largoPercent;
     public int color;
     public int colorSeleccionado;
-    public int ancho;
+    public int anchoPercent;
     public boolean  seleccionado = false;
     private String name;
 
     public UIButton(int x, int y, int ancho, int largo, int color, int colorSeleccionado) {
-        this.x = x;
-        this.y = y;
-        this.largo = largo;
+        this.xPercent = x;
+        this.yPercent = y;
+        this.largoPercent = largo;
         this.color = color;
         this.colorSeleccionado = colorSeleccionado;
-        this.ancho = ancho;
+        this.anchoPercent = ancho;
     }
 
     public UIButton(int x, int y, int ancho, int largo, int color, int colorSeleccionado, String string) {
-        this.x = x;
-        this.y = y;
-        this.largo = largo;
+        this.xPercent = x;
+        this.yPercent = y;
+        this.largoPercent = largo;
         this.color = color;
         this.colorSeleccionado = colorSeleccionado;
-        this.ancho = ancho;
+        this.anchoPercent = ancho;
         this.name = string;
     }
 

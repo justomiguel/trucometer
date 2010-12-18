@@ -56,30 +56,28 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     private int posX = 0;
     private int posY = 0;
     private boolean canMoveFosoforo;
+    private int ancho;
+    private int alto;
 
     public GameCounterCanvas(UIOptions inst) {
         setFullScreenMode(true);
-        setTitle("Truco Meter");
+
+        ancho = this.getWidth();
+        alto = this.getHeight();
+        
+        // get config
         mobile = inst.backScreen.mobile;
         isTactil = hasPointerEvents();
-        init(inst);
-        try {
-            mainTitle = Image.createImage(mobile.game_titlePosition.name);
-            mainTitle = ImageUtil.resizeTransparentImage(mainTitle, mobile.mainTitleWidth, mobile.mainTitleHeight);
-            // si no tiene seteado por defecto una imagen ocupa la img por defecto hasta que esta cubra su pantalla
-            if (mobile.myBackGround.length() == 0) {
-                mainBackGround = Image.createImage(mobile.defaultBackGround);
-                mainBackGround = Image.createImage(mainBackGround, 0, 0, this.getWidth(), this.getHeight(), Sprite.TRANS_NONE);
-            } else {
-                mainBackGround = Image.createImage(mobile.myBackGround);
-            }
 
-        } catch (IOException ex) {
-        }
+        // create images
+        createImages();
 
-        letrero = new Marquesina(mobile.game_stringsPosition[0].name, mobile.game_stringsPosition[0].x, mobile.game_stringsPosition[0].y);
-        timer = new Timer();
-        timer.scheduleAtFixedRate(letrero, 0, 40);
+        // set config according the screen size
+        setScreenConfig();
+        
+        // generar ticker
+        letrero = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
+        
     }
 
     public void log(String o) {
@@ -91,12 +89,12 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     protected void pointerPressed(int x, int y) {
-        if ((x > mobile.game_botones[0].x) && x < (mobile.game_botones[0].x + mobile.game_botones[0].ancho)) {
-            if (y > (mobile.game_botones[0].y) && (y < (mobile.game_botones[0].y + mobile.game_botones[0].largo))) {
+        if ((x > mobile.game_botones[0].xPercent) && x < (mobile.game_botones[0].xPercent + mobile.game_botones[0].anchoPercent)) {
+            if (y > (mobile.game_botones[0].yPercent) && (y < (mobile.game_botones[0].yPercent + mobile.game_botones[0].largoPercent))) {
                 mobile.game_botones[0].seleccionado = true;
             }
-        } else if (x > 210 && x < this.getWidth()) {
-            if (y > 300) {
+        } else if (x > mobile.fosforosUnderX && x < this.ancho) {
+            if (y > mobile.fosforosUnderY) {
                 canMoveFosoforo = true;
             }
         }
@@ -104,27 +102,28 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     protected void pointerReleased(int x, int y) {
-        if (((x > mobile.game_botones[0].x) && x < (mobile.game_botones[0].x + mobile.game_botones[0].ancho)) && (y > (mobile.game_botones[0].y) && (y < (mobile.game_botones[0].y + mobile.game_botones[0].largo)))) {
+        if (((x > mobile.game_botones[0].xPercent) && x < (mobile.game_botones[0].xPercent + mobile.game_botones[0].anchoPercent)) && (y > (mobile.game_botones[0].yPercent) && (y < (mobile.game_botones[0].yPercent + mobile.game_botones[0].largoPercent)))) {
+            interrupted = true;
             preferencesInstance.midletInstance.d.setCurrent(preferencesInstance);
             mobile.game_botones[0].seleccionado = false;
         } else {
             if (canMoveFosoforo) {
-                if ((x > mobile.game_botones[1].x) && (x < (mobile.game_botones[1].x + mobile.game_botones[1].ancho))) {
-                    if (y > (mobile.game_botones[1].y) && (y < (mobile.game_botones[1].y + mobile.game_botones[1].largo))) {
+                if ((x > mobile.game_botones[1].xPercent) && (x < (mobile.game_botones[1].xPercent + mobile.game_botones[1].anchoPercent))) {
+                    if (y > (mobile.game_botones[1].yPercent) && (y < (mobile.game_botones[1].yPercent + mobile.game_botones[1].largoPercent))) {
                         if (tantoUSR < 15) {
                             tantoUSR++;
                         }
                     }
-                } else if ((x > mobile.game_botones[2].x) && x < (mobile.game_botones[2].x + mobile.game_botones[2].ancho)) {
-                    if (y > (mobile.game_botones[2].y) && (y < (mobile.game_botones[2].y + mobile.game_botones[2].largo))) {
+                } else if ((x > mobile.game_botones[2].xPercent) && x < (mobile.game_botones[2].xPercent + mobile.game_botones[2].anchoPercent)) {
+                    if (y > (mobile.game_botones[2].yPercent) && (y < (mobile.game_botones[2].yPercent + mobile.game_botones[2].largoPercent))) {
                         if (tantoRival < 15) {
                             tantoRival++;
                         }
                     }
                 }
                 canMoveFosoforo = false;
-                posX = 250;
-                posY = 330;
+                posX = -fosforoTactil.getWidth();
+                posY = -fosforoTactil.getHeight();
             }
 
         }
@@ -140,12 +139,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     protected void paint(Graphics g) {
-        g.setColor(0x08610D);
-        g.drawRect(0, 0, this.getWidth(), this.getHeight());
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.drawImage(mainBackGround, 0, 0, Graphics.TOP | Graphics.LEFT);
-        g.setColor(0x000000);
-
+        g.setColor(0xFFFFFF);
+        g.drawRect(0, 0, this.ancho - 1, this.alto - 1);
         //g.drawImage(background, 0, 0, Graphics.TOP | Graphics.LEFT);
         // dibujo recuadros interiores
         if (isTactil) {
@@ -154,25 +150,26 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 object = mobile.game_botones[i];
                 if (object.seleccionado) {
                     g.setColor(object.colorSeleccionado);
-                    g.fillRect(object.x, object.y, object.ancho, object.largo);
+                    g.fillRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
                 }
-
-
                 g.setColor(0xFFFFFF);
-                g.drawRect(object.x, object.y, object.ancho, object.largo);
+                g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
             }
         }
-        // dibujo rectas
-        CanvasLine object;
+        // guardar en constantes
+        int percent;
+        g.setColor(0xFFFFFF);
+
+        // dibujo verticales
         for (int i = 0; i < mobile.game_verticalLinesPosition.length; i++) {
-            object = mobile.game_verticalLinesPosition[i];
-            g.setColor(0xFFFFFF);
-            g.drawLine(object.x, object.y, object.x, object.y + object.largo);
+            percent = mobile.game_verticalLinesPosition[i];
+            g.drawLine(this.ancho / 2, percent * this.alto / 100, this.ancho / 2, this.alto);
         }
+
+        // dibujolineas horizontales
         for (int i = 0; i < mobile.game_HorizontalLinesPosition.length; i++) {
-            object = mobile.game_HorizontalLinesPosition[i];
-            g.setColor(0xFFFFFF);
-            g.drawLine(object.x, object.y, object.x + object.largo, object.y);
+            percent = mobile.game_HorizontalLinesPosition[i];
+            g.drawLine(0, percent * this.alto / 100, this.ancho, percent * this.alto / 100);
         }
 
         // dibujo la imagen del titulo
@@ -183,29 +180,25 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         drawFosforos(g);
         g.setColor(0xFFFFFF);
         g.setFont(font);
-        // ver esto
-        g.drawString(nombreTeamUsr, mobile.game_stringsPosition[1].x, mobile.game_stringsPosition[1].y, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamRival, mobile.game_stringsPosition[2].x, mobile.game_stringsPosition[2].y, Graphics.TOP | Graphics.LEFT);
-        g.drawString(mobile.game_stringsPosition[3].name, mobile.game_stringsPosition[3].x, mobile.game_stringsPosition[3].y, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamUsr + "  0", mobile.game_stringsPosition[4].x, mobile.game_stringsPosition[4].y, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamRival + "  0", mobile.game_stringsPosition[5].x, mobile.game_stringsPosition[5].y, Graphics.TOP | Graphics.LEFT);
-        g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_SMALL));
-        g.drawString("Atras", 40, this.getHeight() - 25, Graphics.TOP | Graphics.LEFT);
-        if (canMoveFosoforo){
+        g.drawString(nombreTeamUsr, mobile.game_stringsPosition[1].xPercent * this.ancho / 100, mobile.game_stringsPosition[1].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamRival, mobile.game_stringsPosition[2].xPercent * this.ancho / 100, mobile.game_stringsPosition[2].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(mobile.game_stringsPosition[3].name, mobile.game_stringsPosition[3].xPercent * this.ancho / 100, mobile.game_stringsPosition[3].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamUsr + "  0", mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamRival + "  0", mobile.game_stringsPosition[5].xPercent * this.ancho / 100, mobile.game_stringsPosition[5].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(mobile.game_stringsPosition[6].name,mobile.game_stringsPosition[6].xPercent * this.ancho / 100, mobile.game_stringsPosition[6].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        if (canMoveFosoforo) {
             g.drawImage(fosforoTactil.getShadow(), posX - 2, posY + 3, Graphics.TOP | Graphics.LEFT);
             g.drawImage(fosforoTactil.getImg(), posX, posY, Graphics.TOP | Graphics.LEFT);
         }
-
         // dibuja varios fosforos
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0;i< 12; i++) {
             Image img = fosforoTactil.getImg();
-            g.drawImage(img, 200 + i * img.getWidth(), 300, Graphics.TOP | Graphics.LEFT);
+            g.drawImage(img, mobile.fosforosUnderX + i * img.getWidth(), mobile.fosforosUnderY, Graphics.TOP | Graphics.LEFT);
 
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0;i< 10; i++) {
             Image img = fosforoTactil.getImg();
-            g.drawImage(img, 203 + i * img.getWidth(), 310, Graphics.TOP | Graphics.LEFT);
-
+            g.drawImage(img, mobile.fosforosUnderX + 8 + i * img.getWidth(), mobile.fosforosUnderY + 14, Graphics.TOP | Graphics.LEFT);
         }
     }
 
@@ -243,7 +236,6 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 }
                 break;
         }
-
         repaint();
     }
 
@@ -256,13 +248,26 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
     private void createImages() {
         try {
+            //imagen de fondo
+            mainTitle = Image.createImage(mobile.game_titlePosition.name);
+            mainTitle = ImageUtil.resizeTransparentImage(mainTitle, mobile.mainTitleWidth, mobile.mainTitleHeight);
+            // si no tiene seteado por defecto una imagen ocupa la img por defecto hasta que esta cubra su pantalla
+            if (mobile.myBackGround.length() == 0) {
+                mainBackGround = Image.createImage(mobile.defaultBackGround);
+                mainBackGround = Image.createImage(mainBackGround, 0, 0, this.ancho, this.alto, Sprite.TRANS_NONE);
+            } else {
+                mainBackGround = Image.createImage(mobile.myBackGround);
+            }
+
+            // fosforos
             Random random = new Random();
             fosforos = new Fosforos[15];
             // shadows
             Image genericImage = null;
             Image shadowGeneric = null;
             int num = 0;
-            for (int i = 0; i < fosforos.length; i++) {
+            for (int i = 0; i
+                    < fosforos.length; i++) {
                 num = i + 1;
                 fosforos[i] = new Fosforos();
                 if (num % 5 == 0) {
@@ -282,7 +287,6 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 } else {
                     genericImage = Image.createImage(mobile.fosforoUP);
                     genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
-
                     shadowGeneric = Image.createImage("/shadow.png");
                     shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth, mobile.upFosforoHeight);
                 }
@@ -295,7 +299,6 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 // sombras
                 fosforos[i].setShadow(shadowGeneric);
             }
-
             fosforoTactil = new Fosforos();
             genericImage = Image.createImage(mobile.fosforoUP);
             genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
@@ -316,24 +319,37 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         //okCommand = null;
         exitCommand = null;
         fosforos = null;
-
     }
 
-    private void init(UIOptions inst) {
+    public void init(UIOptions inst) {
+        // screen to go...
         preferencesInstance = inst;
+
+        // the names of the teams
         nombreTeamRival = Settings.configuration().getRivalTeam();
         nombreTeamUsr = Settings.configuration().getUsrTeam();
+
+        // default font
         font = Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_MEDIUM);
+
+        // usr & rival count
         tantoRival = tantoUSR = 0;
+
         // add commands
         exitCommand = new Command("Go Back", Command.EXIT, 0);
         this.addCommand(exitCommand);
         this.setCommandListener(this);
-        // create images
-        createImages();
+
+        // generar Timer
+        timer = new Timer();
+        timer.scheduleAtFixedRate(letrero, 0, 40);
+
     }
 
-    private void drawFosforosLine(Graphics g) {
+    public void stop(){
+        timer.cancel();
+        interrupted = true;
+        this.removeCommand(exitCommand);
     }
 
     private void drawFosforos(Graphics g) {
@@ -343,9 +359,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         int i = 0;
         int DOWNcounter = 0;
         int UPcounter = 0;
-
         // ni se te ocurra tocar esto
-        for (int j = 0; j < tantoUSR; j++) {
+        for (int j = 0; j
+                < tantoUSR; j++) {
             Image img = fosforos[j].getImg();
             Image shadow = fosforos[j].getShadow();
             if ((fosforos[j].isOn())) {
@@ -360,8 +376,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                     g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
                     DOWNcounter++;
                     if (DOWNcounter == 2) {
-                        DOWNcounter = 0;
-                    }
+                        DOWNcounter = 0;                    }
                 } else {
                     // hago la gilada esta por que empiezo al reves por eso ... :S
                     int k = ((i % 2) != 0) ? i - 1 : i;
@@ -379,7 +394,6 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 i = 0;
             }
         }
-
         initialX = mobile.fosforosPositionR.x;
         initialY = mobile.fosforosPositionR.y;
         num = 0;
@@ -387,7 +401,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         DOWNcounter = 0;
         UPcounter = 0;
         // ni se te ocurra tocar esto
-        for (int j = 0; j < tantoRival; j++) {
+        for (int j = 0; j
+                < tantoRival; j++) {
             Image img = fosforos[j].getImg();
             Image shadow = fosforos[j].getShadow();
             if ((fosforos[j].isOn())) {
@@ -425,6 +440,21 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
     private void log(boolean b) {
         System.out.println(b);
-
     }
+
+    private void setScreenConfig() {
+        // set the buttons according to this screen;
+         if (isTactil) {
+            UIButton button;
+            for (int i = 0; i < mobile.game_botones.length; i++) {
+                button = mobile.game_botones[i];
+                button.xPercent = button.xPercent*ancho/100;
+                button.yPercent = button.yPercent*alto/100;
+                button.anchoPercent = button.anchoPercent*ancho/100;
+                button.largoPercent = button.largoPercent*alto/100;
+            }
+        }
+    }
+
+    
 }

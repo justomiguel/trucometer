@@ -11,13 +11,13 @@ package com.jmv.uicomponents.canvas;
  */
 public class CanvasString {
 
-    public int x;
-    public int y;
+    public int xPercent;
+    public int yPercent;
     public String name;
 
     public CanvasString(int x, int y, String name) {
-        this.x = x;
-        this.y = y;
+        this.xPercent = x;
+        this.yPercent = y;
         this.name = name;
     }
 

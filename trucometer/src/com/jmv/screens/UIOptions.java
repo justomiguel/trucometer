@@ -41,92 +41,112 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
     private Command exitCommand;
     private Command playGameCommand;
     private Thread t;
+    private int ancho;
+    private int alto;
 
     UIOptions(Menu aThis, GameMidlet midletInstance) {
         setFullScreenMode(true);
         this.midletInstance = midletInstance;
         backScreen = aThis;
         isTactil = hasPointerEvents();
+
         textFieldUSR = new ComboBox(this, "usr");
         textFieldRival = new ComboBox(this, "rival");
-        usrTeam = new CanvasString(110, 101, "usrTeam");
-        rivalTeam = new CanvasString(110, 175, "usrRival");
+
+        usrTeam = backScreen.mobile.opciones_strings[0];
+        rivalTeam = backScreen.mobile.opciones_strings[1];
+
         try {
             options = Image.createImage("/opciones.png");
             options = ImageUtil.resizeImage(options, this.getWidth(), this.getHeight(), 2);
         } catch (IOException ex) {
         }
+
         setCommandListener(this);
+
         exitCommand = new Command("Exit", Command.EXIT, 0);
         playGameCommand = new Command("Play!", Command.SCREEN, 0);
         this.addCommand(exitCommand);
         this.addCommand(playGameCommand);
-        //TODO: hay que hacer un metodo init asi puedo llamar al destroy y liberar objetos de memoria
+
+        //TODO: hay que hacer un metodo init asi puedo llamar al destroy yPercent liberar objetos de memoria
+
+        this.alto = this.getHeight();
+        this.ancho = this.getWidth();
+
+         if (isTactil) {
+            UIButton button;
+            for (int i = 0; i < backScreen.mobile.opciones_botones.length; i++) {
+                button = backScreen.mobile.opciones_botones[i];
+                button.xPercent = button.xPercent*ancho/100;
+                button.yPercent = button.yPercent*alto/100;
+                button.anchoPercent = button.anchoPercent*ancho/100;
+                button.largoPercent = button.largoPercent*alto/100;
+            }
+        }
     }
 
     protected void pointerPressed(int x, int y) {
-        System.out.println("x: " + x + " y: " + y);
-        if (x >= backScreen.mobile.opciones_botones[0].x && x <= backScreen.mobile.opciones_botones[0].ancho) {
-            if (y >= backScreen.mobile.opciones_botones[0].y && y <= (backScreen.mobile.opciones_botones[0].y + backScreen.mobile.opciones_botones[0].largo)) {
+        if (x >= backScreen.mobile.opciones_botones[0].xPercent && x <= backScreen.mobile.opciones_botones[0].anchoPercent) {
+            if (y >= backScreen.mobile.opciones_botones[0].yPercent && y <= (backScreen.mobile.opciones_botones[0].yPercent + backScreen.mobile.opciones_botones[0].largoPercent)) {
                 //lamo al juego
                 backScreen.mobile.opciones_botones[0].seleccionado = true;
-                repaint();
-            } else if (y >= backScreen.mobile.opciones_botones[1].y && y <= (backScreen.mobile.opciones_botones[1].y + backScreen.mobile.opciones_botones[1].largo)) {
+            } else if (y >= backScreen.mobile.opciones_botones[1].yPercent && y <= (backScreen.mobile.opciones_botones[1].yPercent + backScreen.mobile.opciones_botones[1].largoPercent)) {
                 backScreen.mobile.opciones_botones[1].seleccionado = true;
-                repaint();
             }
-        } else if (y >= backScreen.mobile.opciones_botones[2].y && y <= (backScreen.mobile.opciones_botones[2].y + backScreen.mobile.opciones_botones[2].largo)) {
-            if (x >= backScreen.mobile.opciones_botones[2].x && x <= (backScreen.mobile.opciones_botones[2].x + backScreen.mobile.opciones_botones[2].ancho)) {
+        } else if (y >= backScreen.mobile.opciones_botones[2].yPercent && y <= (backScreen.mobile.opciones_botones[2].yPercent + backScreen.mobile.opciones_botones[2].largoPercent)) {
+            if (x >= backScreen.mobile.opciones_botones[2].xPercent && x <= (backScreen.mobile.opciones_botones[2].xPercent + backScreen.mobile.opciones_botones[2].anchoPercent)) {
                 //lamo al juego
                 backScreen.mobile.opciones_botones[2].seleccionado = true;
-                repaint();
-            } else if (x >= backScreen.mobile.opciones_botones[3].x && x <= (backScreen.mobile.opciones_botones[3].x + backScreen.mobile.opciones_botones[3].ancho)) {
+            } else if (x >= backScreen.mobile.opciones_botones[3].xPercent && x <= (backScreen.mobile.opciones_botones[3].xPercent + backScreen.mobile.opciones_botones[3].anchoPercent)) {
                 //lamo al juego
                 backScreen.mobile.opciones_botones[3].seleccionado = true;
-                repaint();
             }
         }
+        repaint();
     }
 
     protected void pointerReleased(int x, int y) {
-        if (x >= backScreen.mobile.opciones_botones[0].x && x <= backScreen.mobile.opciones_botones[0].ancho) {
-            if (y >= backScreen.mobile.opciones_botones[0].y && y <= (backScreen.mobile.opciones_botones[0].y + backScreen.mobile.opciones_botones[0].largo)) {
+        if (x >= backScreen.mobile.opciones_botones[0].xPercent && x <= backScreen.mobile.opciones_botones[0].anchoPercent) {
+            if (y >= backScreen.mobile.opciones_botones[0].yPercent && y <= (backScreen.mobile.opciones_botones[0].yPercent + backScreen.mobile.opciones_botones[0].largoPercent)) {
                 //lamo al juego
                 backScreen.mobile.opciones_botones[0].seleccionado = false;
-                repaint();
                 textFieldUSR.setString(usrTeam.name);
                 this.midletInstance.d.setCurrent(textFieldUSR);
-            } else if (y >= backScreen.mobile.opciones_botones[1].y && y <= (backScreen.mobile.opciones_botones[1].y + backScreen.mobile.opciones_botones[1].largo)) {
+            } else if (y >= backScreen.mobile.opciones_botones[1].yPercent && y <= (backScreen.mobile.opciones_botones[1].yPercent + backScreen.mobile.opciones_botones[1].largoPercent)) {
                 backScreen.mobile.opciones_botones[1].seleccionado = false;
-                repaint();
                 textFieldRival.setString(rivalTeam.name);
                 this.midletInstance.d.setCurrent(textFieldRival);
             }
-        }else if (y >= backScreen.mobile.opciones_botones[2].y && y <= (backScreen.mobile.opciones_botones[2].y + backScreen.mobile.opciones_botones[2].largo)) {
-            if (x >= backScreen.mobile.opciones_botones[2].x && x <= (backScreen.mobile.opciones_botones[2].x + backScreen.mobile.opciones_botones[2].ancho)) {
+        }else if (y >= backScreen.mobile.opciones_botones[2].yPercent && y <= (backScreen.mobile.opciones_botones[2].yPercent + backScreen.mobile.opciones_botones[2].largoPercent)) {
+            if (x >= backScreen.mobile.opciones_botones[2].xPercent && x <= (backScreen.mobile.opciones_botones[2].xPercent + backScreen.mobile.opciones_botones[2].anchoPercent)) {
+
                 //lamo al juego
                 backScreen.mobile.opciones_botones[2].seleccionado = false;
-                repaint();
                 backScreen.reset();
                 midletInstance.d.setCurrent(backScreen);
-            } else if (x >= backScreen.mobile.opciones_botones[3].x && x <= (backScreen.mobile.opciones_botones[3].x + backScreen.mobile.opciones_botones[3].ancho)) {
-                //lamo al juego
+
+            } else if (x >= backScreen.mobile.opciones_botones[3].xPercent && x <= (backScreen.mobile.opciones_botones[3].xPercent + backScreen.mobile.opciones_botones[3].anchoPercent)) {
+
+                //llamo al juego
                 backScreen.mobile.opciones_botones[3].seleccionado = false;
-                repaint();
-                if (gameCanvas != null) {
-                    t = null;
-                    gameCanvas.destroy();
-                    gameCanvas = null;
-                }
+                
                 Settings.configuration().setEnd_game(15);
                 Settings.configuration().setRivalTeam(rivalTeam.name);
                 Settings.configuration().setUsrTeam(usrTeam.name);
-                this.gameCanvas = new GameCounterCanvas(this);
-                this.t = new Thread(gameCanvas);
-                t.start();
+
+                if (gameCanvas == null) {
+                    this.gameCanvas = new GameCounterCanvas(this);
+                    this.t = new Thread(gameCanvas);
+                    this.t.start();
+                } 
+                
+                this.gameCanvas.init(this);
+                
                 midletInstance.d.setCurrent(gameCanvas);
             }
         }
+        repaint();
     }
 
     protected void paint(Graphics g) {
@@ -137,14 +157,15 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
                 object = backScreen.mobile.opciones_botones[i];
                 if (object.seleccionado) {
                     g.setColor(object.colorSeleccionado);
-                    g.fillRect(object.x, object.y, object.ancho, object.largo);
-                }
+                    g.fillRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
+                    g.drawString("pos x: "+object.xPercent+" y:"+object.yPercent, object.xPercent, object.yPercent, Graphics.TOP | Graphics.LEFT);
+               }
             }
         }
         g.setColor(0x000000);
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE));
-        g.drawString(usrTeam.name, usrTeam.x, usrTeam.y, Graphics.TOP | Graphics.HCENTER);
-        g.drawString(rivalTeam.name, rivalTeam.x, rivalTeam.y, Graphics.TOP | Graphics.HCENTER);
+        g.drawString(usrTeam.name, usrTeam.xPercent*this.getWidth()/100, usrTeam.yPercent*this.getHeight()/100, Graphics.TOP | Graphics.HCENTER);
+        g.drawString(rivalTeam.name, rivalTeam.xPercent*this.getWidth()/100, rivalTeam.yPercent*this.getHeight()/100, Graphics.TOP | Graphics.HCENTER);
         
         
     }
