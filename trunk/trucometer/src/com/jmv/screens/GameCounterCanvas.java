@@ -33,50 +33,72 @@ import javax.microedition.lcdui.game.Sprite;
 public class GameCounterCanvas extends Canvas implements Runnable, CommandListener, IDestroyable {
 
     // referencias a los fosforos
-    private Fosforos[] fosforos = null;
+    private Fosforos[] tantos = null;
+    private Fosforos tantoTactil;
+
+    // imagenes de tantos
+    private Image IMAGE_UP;
+    private Image IMAGE_DIAG;
+    private Image IMAGE_SUP;
+    private Image IMAGE_SDIAG;
+
+    // background images
+    private Image mainBackGround;
+    private Image mainTitle;
+
     // para manejar los tantos
     private int tantoUSR;
     private int tantoRival;
-    private String nombreTeamUsr;
-    private String nombreTeamRival;
-    // comandos
-    private Command exitCommand;
-    private UIOptions preferencesInstance = null;
-    private Font font = null;
-    private Phone mobile;
-    private Image mainTitle;
-    //manager for the animations
-    private Timer timer;
-    // my ticker
-    private Marquesina letrero;
-    private boolean interrupted = false;
-    private boolean isTactil;
-    private Image mainBackGround;
-    private Fosforos fosforoTactil;
-    private int posX = 0;
-    private int posY = 0;
-    private boolean canMoveFosoforo;
+
+    // image coordinates
+    private int posXTantoTactil = 0;
+    private int posYTantoTactil = 0;
+
+    // screen size
     private int ancho;
     private int alto;
 
-    public GameCounterCanvas(UIOptions inst) {
-        setFullScreenMode(true);
+    // team players
+    private String nombreTeamUsr;
+    private String nombreTeamRival;
+    
+    // comandos
+    private Command exitCommand;
 
+    // back screen
+    private UIOptions preferencesInstance = null;
+
+    // fonts management
+    private Font font = null;
+
+    // configuration
+    private Phone mobile;
+    
+    //manager for the animations
+    private Timer timer;
+    
+    // my ticker
+    private Marquesina ticker;
+
+    // boolean vars
+    private boolean interrupted = false;
+    private boolean isTactil;
+    private boolean givePoints;
+
+    public GameCounterCanvas(UIOptions inst) {
+
+        setFullScreenMode(true);
         ancho = this.getWidth();
         alto = this.getHeight();
-        
         // get config
         mobile = inst.backScreen.mobile;
         isTactil = hasPointerEvents();
-
         // create images
         createImages();
-
         // set config according the screen size
         setScreenConfig();
-        
         // generar ticker
-        letrero = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
+        ticker = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
         
     }
 
@@ -95,7 +117,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
             }
         } else if (x > mobile.fosforosUnderX && x < this.ancho) {
             if (y > mobile.fosforosUnderY) {
-                canMoveFosoforo = true;
+                givePoints = true;
             }
         }
         repaint();
@@ -107,7 +129,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
             preferencesInstance.midletInstance.d.setCurrent(preferencesInstance);
             mobile.game_botones[0].seleccionado = false;
         } else {
-            if (canMoveFosoforo) {
+            if (givePoints) {
                 if ((x > mobile.game_botones[1].xPercent) && (x < (mobile.game_botones[1].xPercent + mobile.game_botones[1].anchoPercent))) {
                     if (y > (mobile.game_botones[1].yPercent) && (y < (mobile.game_botones[1].yPercent + mobile.game_botones[1].largoPercent))) {
                         if (tantoUSR < 15) {
@@ -121,9 +143,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                         }
                     }
                 }
-                canMoveFosoforo = false;
-                posX = -fosforoTactil.getWidth();
-                posY = -fosforoTactil.getHeight();
+                givePoints = false;
+                posXTantoTactil = -tantoTactil.getWidth();
+                posYTantoTactil = -tantoTactil.getHeight();
             }
 
         }
@@ -132,9 +154,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     protected void pointerDragged(int x, int y) {
-        if (canMoveFosoforo) {
-            posX = x;
-            posY = y;
+        if (givePoints) {
+            posXTantoTactil = x;
+            posYTantoTactil = y;
         }
     }
 
@@ -175,7 +197,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         // dibujo la imagen del titulo
         g.drawImage(mainTitle, mobile.game_titlePosition.x, mobile.game_titlePosition.y, Graphics.TOP | Graphics.LEFT);
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_SMALL));
-        g.drawString(letrero.getContent(), letrero.getX(), letrero.getY(), Graphics.TOP | Graphics.LEFT);
+        g.drawString(ticker.getContent(), ticker.getX(), ticker.getY(), Graphics.TOP | Graphics.LEFT);
         // dibujo los fosforos
         drawFosforos(g);
         g.setColor(0xFFFFFF);
@@ -186,18 +208,18 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         g.drawString(nombreTeamUsr + "  0", mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(nombreTeamRival + "  0", mobile.game_stringsPosition[5].xPercent * this.ancho / 100, mobile.game_stringsPosition[5].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(mobile.game_stringsPosition[6].name,mobile.game_stringsPosition[6].xPercent * this.ancho / 100, mobile.game_stringsPosition[6].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
-        if (canMoveFosoforo) {
-            g.drawImage(fosforoTactil.getShadow(), posX - 2, posY + 3, Graphics.TOP | Graphics.LEFT);
-            g.drawImage(fosforoTactil.getImg(), posX, posY, Graphics.TOP | Graphics.LEFT);
+        if (givePoints) {
+            g.drawImage(tantoTactil.getShadow(), posXTantoTactil - 2, posYTantoTactil + 3, Graphics.TOP | Graphics.LEFT);
+            g.drawImage(tantoTactil.getImg(), posXTantoTactil, posYTantoTactil, Graphics.TOP | Graphics.LEFT);
         }
         // dibuja varios fosforos
         for (int i = 0;i< 12; i++) {
-            Image img = fosforoTactil.getImg();
+            Image img = tantoTactil.getImg();
             g.drawImage(img, mobile.fosforosUnderX + i * img.getWidth(), mobile.fosforosUnderY, Graphics.TOP | Graphics.LEFT);
 
         }
         for (int i = 0;i< 10; i++) {
-            Image img = fosforoTactil.getImg();
+            Image img = tantoTactil.getImg();
             g.drawImage(img, mobile.fosforosUnderX + 8 + i * img.getWidth(), mobile.fosforosUnderY + 14, Graphics.TOP | Graphics.LEFT);
         }
     }
@@ -248,9 +270,18 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
     private void createImages() {
         try {
+
             //imagen de fondo
             mainTitle = Image.createImage(mobile.game_titlePosition.name);
             mainTitle = ImageUtil.resizeTransparentImage(mainTitle, mobile.mainTitleWidth, mobile.mainTitleHeight);
+            
+            //
+            IMAGE_UP = Image.createImage(mobile.fosforoUP);
+            IMAGE_DIAG = Image.createImage(mobile.fosforoDIAG);
+
+            IMAGE_SUP = Image.createImage("/shadow.png");
+            IMAGE_SDIAG = Image.createImage("/shadowDiag.png");
+
             // si no tiene seteado por defecto una imagen ocupa la img por defecto hasta que esta cubra su pantalla
             if (mobile.myBackGround.length() == 0) {
                 mainBackGround = Image.createImage(mobile.defaultBackGround);
@@ -261,54 +292,54 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
             // fosforos
             Random random = new Random();
-            fosforos = new Fosforos[15];
+            tantos = new Fosforos[15];
             // shadows
             Image genericImage = null;
             Image shadowGeneric = null;
             int num = 0;
             for (int i = 0; i
-                    < fosforos.length; i++) {
+                    < tantos.length; i++) {
                 num = i + 1;
-                fosforos[i] = new Fosforos();
+                tantos[i] = new Fosforos();
                 if (num % 5 == 0) {
-                    genericImage = Image.createImage(mobile.fosforoDIAG);
+                    genericImage = IMAGE_DIAG;
                     genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.diagFosforoWidth, mobile.diagFosforoHeight);
-                    shadowGeneric = Image.createImage("/shadowDiag.png");
+                    shadowGeneric = IMAGE_SDIAG;
                     shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.diagFosforoWidth, mobile.diagFosforoHeight);
                 } else if (num % 2 == 0) {
-                    genericImage = Image.createImage(mobile.fosforoUP);
+                    genericImage = IMAGE_UP;
                     // la doy vuelta
                     genericImage = Image.createImage(genericImage, 0, 0, genericImage.getWidth(), genericImage.getHeight(), Sprite.TRANS_ROT90);
                     genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.downFosforoWidth, mobile.downFosforoHeight);
                     // sombra
-                    shadowGeneric = Image.createImage("/shadow.png");
+                    shadowGeneric = IMAGE_SUP;
                     shadowGeneric = Image.createImage(shadowGeneric, 0, 0, shadowGeneric.getWidth(), shadowGeneric.getHeight(), Sprite.TRANS_ROT90);
                     shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.downFosforoWidth, mobile.downFosforoHeight);
                 } else {
-                    genericImage = Image.createImage(mobile.fosforoUP);
+                    genericImage = IMAGE_UP;
                     genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
-                    shadowGeneric = Image.createImage("/shadow.png");
+                    shadowGeneric = IMAGE_SUP;
                     shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth, mobile.upFosforoHeight);
                 }
                 if ((random.nextInt() % 2 == 0) || (num % 5 == 0)) {
                     genericImage = Image.createImage(genericImage, 0, 0, genericImage.getWidth(), genericImage.getHeight(), Sprite.TRANS_MIRROR_ROT180);
                     shadowGeneric = Image.createImage(shadowGeneric, 0, 0, shadowGeneric.getWidth(), shadowGeneric.getHeight(), Sprite.TRANS_MIRROR_ROT180);
                 }
-                fosforos[i].setImg(genericImage);
-                fosforos[i].setOn(true);
+                tantos[i].setImg(genericImage);
+                tantos[i].setOn(true);
                 // sombras
-                fosforos[i].setShadow(shadowGeneric);
+                tantos[i].setShadow(shadowGeneric);
             }
-            fosforoTactil = new Fosforos();
-            genericImage = Image.createImage(mobile.fosforoUP);
+            tantoTactil = new Fosforos();
+            genericImage = IMAGE_UP;
             genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
 
-            shadowGeneric = Image.createImage("/shadow.png");
+            shadowGeneric = IMAGE_SUP;
             shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth, mobile.upFosforoHeight);
-            fosforoTactil.setImg(genericImage);
-            fosforoTactil.setOn(true);
+            tantoTactil.setImg(genericImage);
+            tantoTactil.setOn(true);
             // sombras
-            fosforoTactil.setShadow(shadowGeneric);
+            tantoTactil.setShadow(shadowGeneric);
         } catch (IOException ex) {
             System.out.println("No carga imagen");
         }
@@ -318,7 +349,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         preferencesInstance = null;
         //okCommand = null;
         exitCommand = null;
-        fosforos = null;
+        tantos = null;
     }
 
     public void init(UIOptions inst) {
@@ -342,7 +373,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
         // generar Timer
         timer = new Timer();
-        timer.scheduleAtFixedRate(letrero, 0, 40);
+        timer.scheduleAtFixedRate(ticker, 0, 40);
 
     }
 
@@ -362,9 +393,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         // ni se te ocurra tocar esto
         for (int j = 0; j
                 < tantoUSR; j++) {
-            Image img = fosforos[j].getImg();
-            Image shadow = fosforos[j].getShadow();
-            if ((fosforos[j].isOn())) {
+            Image img = tantos[j].getImg();
+            Image shadow = tantos[j].getShadow();
+            if ((tantos[j].isOn())) {
                 num = j + 1;
                 if (num % 5 == 0) {
                     // digbuja diagonales
@@ -403,9 +434,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         // ni se te ocurra tocar esto
         for (int j = 0; j
                 < tantoRival; j++) {
-            Image img = fosforos[j].getImg();
-            Image shadow = fosforos[j].getShadow();
-            if ((fosforos[j].isOn())) {
+            Image img = tantos[j].getImg();
+            Image shadow = tantos[j].getShadow();
+            if ((tantos[j].isOn())) {
                 num = j + 1;
                 if (num % 5 == 0) {
                     // digbuja diagonales
