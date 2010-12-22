@@ -84,6 +84,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     private boolean interrupted = false;
     private boolean isTactil;
     private boolean givePoints;
+    private String usrMatchesWin;
 
     public GameCounterCanvas(UIOptions inst) {
 
@@ -207,7 +208,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         g.drawString(nombreTeamUsr, mobile.game_stringsPosition[1].xPercent * this.ancho / 100, mobile.game_stringsPosition[1].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(nombreTeamRival, mobile.game_stringsPosition[2].xPercent * this.ancho / 100, mobile.game_stringsPosition[2].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(mobile.game_stringsPosition[3].name, mobile.game_stringsPosition[3].xPercent * this.ancho / 100, mobile.game_stringsPosition[3].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamUsr + "  0", mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamUsr + usrMatchesWin, mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(nombreTeamRival + "  0", mobile.game_stringsPosition[5].xPercent * this.ancho / 100, mobile.game_stringsPosition[5].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(mobile.game_stringsPosition[6].name,mobile.game_stringsPosition[6].xPercent * this.ancho / 100, mobile.game_stringsPosition[6].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         if (givePoints) {
