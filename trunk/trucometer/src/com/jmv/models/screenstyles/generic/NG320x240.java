@@ -19,20 +19,20 @@ public class NG320x240 extends Phone {
 
     public NG320x240() {
         super();
-        fosforosPositionU = new Item(15, 86);
-        fosforosPositionR = new Item(135, 86);
+        fosforosPositionU = new Item(13, 28);
+        fosforosPositionR = new Item(65, 28);
 
         // revisar esto se deberia de hacer mejor
-        upFosforoHeight = 40;
-        upFosforoWidth = 4;
-        downFosforoHeight = 4;
-        downFosforoWidth = 40;
-        diagFosforoHeight = 39;
-        diagFosforoWidth = 37;
+        upFosforoHeight = 13;
+        upFosforoWidth = 2;
+        downFosforoHeight = 2;
+        downFosforoWidth = 17;
+        diagFosforoHeight = 13;
+        diagFosforoWidth = 15;
 
         fosforoDIAG = "/diag.png";
         fosforoUP = "/up.png";
-        separate = 13;
+        separate = 4;
         myBackGround = "/gameBackground320.png";
 
         mainTitleHeight = 39;
@@ -40,27 +40,12 @@ public class NG320x240 extends Phone {
 
     }
 
-    protected CanvasLine[] getLinesPosition() {
-        CanvasLine[] result = {new CanvasLine(11, 22, 27), new CanvasLine(42, 22, 159), new CanvasLine(207, 22, 27),
-            new CanvasLine(11, 26, 27), new CanvasLine(42, 26, 159), new CanvasLine(207, 26, 27),
-            new CanvasLine(11, 176, 27), new CanvasLine(42, 176, 159), new CanvasLine(207, 176, 27),
-            new CanvasLine(11, 180, 27), new CanvasLine(42, 180, 159), new CanvasLine(207, 180, 27),
-            new CanvasLine(11, 295, 27), new CanvasLine(42, 295, 159), new CanvasLine(207, 295, 27),
-            new CanvasLine(11, 299, 27), new CanvasLine(42, 299, 159), new CanvasLine(207, 299, 27)};
-        return result;
-    }
-
-    protected CanvasImage getMainTitle() {
-        return new CanvasImage(22, 53, "/mainTitle240.png");
-    }
-
-    protected CanvasString[] getStringsPosition() {
-        CanvasString[] result = {new CanvasString(87, 189, "Play"), new CanvasString(87, 231, "Help"), new CanvasString(87, 270, "Exit")};
-        return result;
-    }
-
     protected UIButton[] getButtonsPosition() {
-        UIButton[] result = {new UIButton(40, 187, 159, 32, 0x585858, 0xA4A4A4), new UIButton(40, 223, 159, 32, 0x585858, 0xA4A4A4), new UIButton(40, 259, 159, 32, 0x585858, 0xA4A4A4)};
+        UIButton[] result = {
+            new UIButton(30, 68, 40, 8, 0x585858, 0xA4A4A4),
+            new UIButton(30, 77, 40, 8, 0x585858, 0xA4A4A4),
+            new UIButton(30, 86, 40, 8, 0x585858, 0xA4A4A4)
+        };
         return result;
     }
 
@@ -83,7 +68,7 @@ public class NG320x240 extends Phone {
     }
 
     protected CanvasImage getGameMainTitle() {
-        return new CanvasImage(22, -2, "/titulo240.png");
+        return new CanvasImage(9, 3, "/titulo240.png",9,79);
     }
 
     protected CanvasString[] getGamesStringsPosition() {
@@ -102,7 +87,7 @@ public class NG320x240 extends Phone {
 
     protected Item[] getSeparacionEntreFosforos() {
         // the distance between the fosforos
-        Item[] result = {new Item(42, 42)};
+        Item[] result = {new Item(16, 16)};
         return result;
     }
 
@@ -127,5 +112,9 @@ public class NG320x240 extends Phone {
             new CanvasString(44, 55, "teamRival"),
         };
         return result;
+    }
+
+    protected CanvasImage getInitialBackGround() {
+         return new CanvasImage(0, 0, "/intro.png");
     }
 }
