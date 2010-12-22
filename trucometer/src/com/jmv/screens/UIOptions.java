@@ -74,14 +74,14 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
         this.alto = this.getHeight();
         this.ancho = this.getWidth();
 
-         if (isTactil) {
+        if (isTactil) {
             UIButton button;
             for (int i = 0; i < backScreen.mobile.opciones_botones.length; i++) {
                 button = backScreen.mobile.opciones_botones[i];
-                button.xPercent = button.xPercent*ancho/100;
-                button.yPercent = button.yPercent*alto/100;
-                button.anchoPercent = button.anchoPercent*ancho/100;
-                button.largoPercent = button.largoPercent*alto/100;
+                button.xPercent = button.xPercent * ancho / 100;
+                button.yPercent = button.yPercent * alto / 100;
+                button.anchoPercent = button.anchoPercent * ancho / 100;
+                button.largoPercent = button.largoPercent * alto / 100;
             }
         }
     }
@@ -118,7 +118,7 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
                 textFieldRival.setString(rivalTeam.name);
                 this.midletInstance.d.setCurrent(textFieldRival);
             }
-        }else if (y >= backScreen.mobile.opciones_botones[2].yPercent && y <= (backScreen.mobile.opciones_botones[2].yPercent + backScreen.mobile.opciones_botones[2].largoPercent)) {
+        } else if (y >= backScreen.mobile.opciones_botones[2].yPercent && y <= (backScreen.mobile.opciones_botones[2].yPercent + backScreen.mobile.opciones_botones[2].largoPercent)) {
             if (x >= backScreen.mobile.opciones_botones[2].xPercent && x <= (backScreen.mobile.opciones_botones[2].xPercent + backScreen.mobile.opciones_botones[2].anchoPercent)) {
 
                 //lamo al juego
@@ -130,7 +130,7 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
 
                 //llamo al juego
                 backScreen.mobile.opciones_botones[3].seleccionado = false;
-                
+
                 Settings.configuration().setEnd_game(15);
                 Settings.configuration().setRivalTeam(rivalTeam.name);
                 Settings.configuration().setUsrTeam(usrTeam.name);
@@ -139,10 +139,10 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
                     this.gameCanvas = new GameCounterCanvas(this);
                     this.t = new Thread(gameCanvas);
                     this.t.start();
-                } 
-                
+                }
+
                 this.gameCanvas.init(this);
-                
+
                 midletInstance.d.setCurrent(gameCanvas);
             }
         }
@@ -158,16 +158,16 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
                 if (object.seleccionado) {
                     g.setColor(object.colorSeleccionado);
                     g.fillRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
-                    g.drawString("pos x: "+object.xPercent+" y:"+object.yPercent, object.xPercent, object.yPercent, Graphics.TOP | Graphics.LEFT);
-               }
+                    g.drawString("pos x: " + object.xPercent + " y:" + object.yPercent, object.xPercent, object.yPercent, Graphics.TOP | Graphics.LEFT);
+                }
             }
         }
         g.setColor(0x000000);
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE));
-        g.drawString(usrTeam.name, usrTeam.xPercent*this.getWidth()/100, usrTeam.yPercent*this.getHeight()/100, Graphics.TOP | Graphics.HCENTER);
-        g.drawString(rivalTeam.name, rivalTeam.xPercent*this.getWidth()/100, rivalTeam.yPercent*this.getHeight()/100, Graphics.TOP | Graphics.HCENTER);
-        
-        
+        g.drawString(usrTeam.name, usrTeam.xPercent * this.getWidth() / 100, usrTeam.yPercent * this.getHeight() / 100, Graphics.TOP | Graphics.HCENTER);
+        g.drawString(rivalTeam.name, rivalTeam.xPercent * this.getWidth() / 100, rivalTeam.yPercent * this.getHeight() / 100, Graphics.TOP | Graphics.HCENTER);
+
+
     }
 
     public void destroy() {
@@ -175,21 +175,23 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
 
     public void commandAction(Command c, Displayable d) {
         if (c == playGameCommand) {
-            if (gameCanvas != null) {
-                t = null;
-                gameCanvas.destroy();
-                gameCanvas = null;
-            }
+            //llamo al juego
+            backScreen.mobile.opciones_botones[3].seleccionado = false;
             Settings.configuration().setEnd_game(15);
             Settings.configuration().setRivalTeam(rivalTeam.name);
             Settings.configuration().setUsrTeam(usrTeam.name);
-            this.gameCanvas = new GameCounterCanvas(this);
-            this.t = new Thread(gameCanvas);
-            t.start();
+            if (gameCanvas == null) {
+                this.gameCanvas = new GameCounterCanvas(this);
+                this.t = new Thread(gameCanvas);
+                this.t.start();
+            }
+            this.gameCanvas.init(this);
             midletInstance.d.setCurrent(gameCanvas);
         } else if (c == exitCommand) {
-            backScreen.reset();
-            midletInstance.d.setCurrent(backScreen);
+             //lamo al juego
+             backScreen.mobile.opciones_botones[2].seleccionado = false;
+             backScreen.reset();
+             midletInstance.d.setCurrent(backScreen);
         }
     }
 
