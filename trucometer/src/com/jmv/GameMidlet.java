@@ -27,8 +27,8 @@ public class GameMidlet extends MIDlet {
         this.menu = new Menu(this);
         d = Display.getDisplay(this);
         d.setCurrent(menu);
-        /*
-        InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/PhoneConfigurations.xml"));
+        
+       /* InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/PhoneConfigurations.xml"));
         KXmlParser parser = new KXmlParser();
         try {
             parser.setInput(reader);
