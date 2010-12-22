@@ -195,11 +195,13 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         }
 
         // dibujo la imagen del titulo
-        g.drawImage(mainTitle, mobile.game_titlePosition.x, mobile.game_titlePosition.y, Graphics.TOP | Graphics.LEFT);
+        g.drawImage(mainTitle, mobile.game_titlePosition.x* this.ancho / 100, mobile.game_titlePosition.y* this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_ITALIC, Font.SIZE_SMALL));
         g.drawString(ticker.getContent(), ticker.getX(), ticker.getY(), Graphics.TOP | Graphics.LEFT);
+
         // dibujo los fosforos
         drawFosforos(g);
+
         g.setColor(0xFFFFFF);
         g.setFont(font);
         g.drawString(nombreTeamUsr, mobile.game_stringsPosition[1].xPercent * this.ancho / 100, mobile.game_stringsPosition[1].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
@@ -273,7 +275,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
             //imagen de fondo
             mainTitle = Image.createImage(mobile.game_titlePosition.name);
-            mainTitle = ImageUtil.resizeTransparentImage(mainTitle, mobile.mainTitleWidth, mobile.mainTitleHeight);
+            mainTitle = ImageUtil.resizeTransparentImage(mainTitle, mobile.game_titlePosition.preferedWidth*this.ancho/100, mobile.game_titlePosition.preferedHeight*this.alto/100);
             
             //
             IMAGE_UP = Image.createImage(mobile.fosforoUP);
@@ -303,23 +305,23 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 tantos[i] = new Fosforos();
                 if (num % 5 == 0) {
                     genericImage = IMAGE_DIAG;
-                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.diagFosforoWidth, mobile.diagFosforoHeight);
+                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.diagFosforoWidth*ancho/100, mobile.diagFosforoHeight*alto/100);
                     shadowGeneric = IMAGE_SDIAG;
-                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.diagFosforoWidth, mobile.diagFosforoHeight);
+                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.diagFosforoWidth*ancho/100, mobile.diagFosforoHeight*alto/100);
                 } else if (num % 2 == 0) {
                     genericImage = IMAGE_UP;
                     // la doy vuelta
                     genericImage = Image.createImage(genericImage, 0, 0, genericImage.getWidth(), genericImage.getHeight(), Sprite.TRANS_ROT90);
-                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.downFosforoWidth, mobile.downFosforoHeight);
+                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.downFosforoWidth*ancho/100, mobile.downFosforoHeight*alto/100);
                     // sombra
                     shadowGeneric = IMAGE_SUP;
                     shadowGeneric = Image.createImage(shadowGeneric, 0, 0, shadowGeneric.getWidth(), shadowGeneric.getHeight(), Sprite.TRANS_ROT90);
-                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.downFosforoWidth, mobile.downFosforoHeight);
+                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.downFosforoWidth*ancho/100, mobile.downFosforoHeight*alto/100);
                 } else {
                     genericImage = IMAGE_UP;
-                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
+                    genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth*ancho/100, mobile.upFosforoHeight*alto/100);
                     shadowGeneric = IMAGE_SUP;
-                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth, mobile.upFosforoHeight);
+                    shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth*ancho/100, mobile.upFosforoHeight*alto/100);
                 }
                 if ((random.nextInt() % 2 == 0) || (num % 5 == 0)) {
                     genericImage = Image.createImage(genericImage, 0, 0, genericImage.getWidth(), genericImage.getHeight(), Sprite.TRANS_MIRROR_ROT180);
@@ -332,10 +334,10 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
             }
             tantoTactil = new Fosforos();
             genericImage = IMAGE_UP;
-            genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth, mobile.upFosforoHeight);
+            genericImage = ImageUtil.resizeTransparentImage(genericImage, mobile.upFosforoWidth*ancho/100, mobile.upFosforoHeight*alto/100);
 
             shadowGeneric = IMAGE_SUP;
-            shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth, mobile.upFosforoHeight);
+            shadowGeneric = ImageUtil.resizeTransparentImage(shadowGeneric, mobile.upFosforoWidth*ancho/100, mobile.upFosforoHeight*alto/100);
             tantoTactil.setImg(genericImage);
             tantoTactil.setOn(true);
             // sombras
@@ -384,15 +386,18 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     private void drawFosforos(Graphics g) {
-        int initialX = mobile.fosforosPositionU.x;
-        int initialY = mobile.fosforosPositionU.y;
+        
+        int initialX = mobile.fosforosPositionU.x*ancho/100;
+        int initialY = mobile.fosforosPositionU.y*alto/100;
+
         int num = 0;
         int i = 0;
+
         int DOWNcounter = 0;
         int UPcounter = 0;
+
         // ni se te ocurra tocar esto
-        for (int j = 0; j
-                < tantoUSR; j++) {
+        for (int j = 0; j< tantoUSR; j++) {
             Image img = tantos[j].getImg();
             Image shadow = tantos[j].getShadow();
             if ((tantos[j].isOn())) {
@@ -403,16 +408,16 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                     g.drawImage(img, initialX + 6, initialY + 5, Graphics.TOP | Graphics.LEFT);
                 } else if (num % 2 == 0) {
                     // dibuja
-                    g.drawImage(shadow, initialX + 3, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x) - 2, Graphics.TOP | Graphics.LEFT);
-                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(shadow, initialX + 3, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x*ancho/100) - 2, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x*ancho/100), Graphics.TOP | Graphics.LEFT);
                     DOWNcounter++;
                     if (DOWNcounter == 2) {
                         DOWNcounter = 0;                    }
                 } else {
                     // hago la gilada esta por que empiezo al reves por eso ... :S
                     int k = ((i % 2) != 0) ? i - 1 : i;
-                    g.drawImage(shadow, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y) - 2, initialY + 3, Graphics.TOP | Graphics.LEFT);
-                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 4, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(shadow, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y*alto/100) - 2, initialY + 3, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y*alto/100), initialY + 4, Graphics.TOP | Graphics.LEFT);
                     UPcounter++;
                     if (UPcounter == 2) {
                         UPcounter = 0;
@@ -425,8 +430,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 i = 0;
             }
         }
-        initialX = mobile.fosforosPositionR.x;
-        initialY = mobile.fosforosPositionR.y;
+        initialX = mobile.fosforosPositionR.x*ancho/100;
+        initialY = mobile.fosforosPositionR.y*alto/100;
         num = 0;
         i = 0;
         DOWNcounter = 0;
@@ -444,8 +449,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                     g.drawImage(img, initialX + 6, initialY + 5, Graphics.TOP | Graphics.LEFT);
                 } else if (num % 2 == 0) {
                     // dibuja
-                    g.drawImage(shadow, initialX + 3, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x) - 2, Graphics.TOP | Graphics.LEFT);
-                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x), Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(shadow, initialX + 3, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x*ancho/100) - 2, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + 4, initialY + DOWNcounter * (mobile.g_fosForosPositionUnder[0].x*ancho/100), Graphics.TOP | Graphics.LEFT);
                     DOWNcounter++;
                     if (DOWNcounter == 2) {
                         DOWNcounter = 0;
@@ -453,8 +458,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 } else {
                     // hago la gilada esta por que empiezo al reves por eso ... :S
                     int k = ((i % 2) != 0) ? i - 1 : i;
-                    g.drawImage(shadow, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y) - 2, initialY + 3, Graphics.TOP | Graphics.LEFT);
-                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y), initialY + 4, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(shadow, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y*alto/100) - 2, initialY + 3, Graphics.TOP | Graphics.LEFT);
+                    g.drawImage(img, initialX + UPcounter * (mobile.g_fosForosPositionUnder[0].y*alto/100), initialY + 4, Graphics.TOP | Graphics.LEFT);
                     UPcounter++;
                     if (UPcounter == 2) {
                         UPcounter = 0;
@@ -485,6 +490,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
                 button.largoPercent = button.largoPercent*alto/100;
             }
         }
+         mobile.separate = mobile.separate*alto/100;
     }
 
     

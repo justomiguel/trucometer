@@ -20,9 +20,7 @@ public abstract class Phone {
     public int alto;
     public int ancho;
 
-    public CanvasImage menu_titlePosition;
-    public CanvasLine[] menu_linesPosition;
-    public CanvasString[] menu_stringsPosition;
+    public CanvasImage menu_backGround;
     public UIButton[] menu_botones;
 
     public CanvasImage opciones_imgPosition;
@@ -66,9 +64,7 @@ public abstract class Phone {
 
     public Phone() {
 
-        menu_linesPosition = getLinesPosition();
-        menu_stringsPosition = getStringsPosition();
-        menu_titlePosition = getMainTitle();
+        menu_backGround = getInitialBackGround();
         menu_botones = getButtonsPosition();
 
         opciones_botones = getOptionsButtons();
@@ -91,9 +87,7 @@ public abstract class Phone {
     }
 
     
-    protected abstract CanvasLine[] getLinesPosition();
-    protected abstract CanvasString[] getStringsPosition();
-    protected abstract CanvasImage getMainTitle();
+    protected abstract CanvasImage getInitialBackGround();
     protected abstract UIButton[] getButtonsPosition();
 
     protected abstract int[] getVerticalGamesLinesPosition();

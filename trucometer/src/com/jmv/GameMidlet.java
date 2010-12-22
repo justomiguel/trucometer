@@ -24,11 +24,10 @@ public class GameMidlet extends MIDlet {
 
     public void startApp() {
 
-         this.menu = new Menu(this);
-        t = new Thread(menu);
-        t.start();
+        this.menu = new Menu(this);
         d = Display.getDisplay(this);
         d.setCurrent(menu);
+        /*
         InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/PhoneConfigurations.xml"));
         KXmlParser parser = new KXmlParser();
         try {
@@ -46,7 +45,7 @@ public class GameMidlet extends MIDlet {
         System.out.print("value: " + "");
         XmlNode xml2 = getNode(xml, "d320x240");
         XmlNode xml3 = getNode(xml2, "options");
-        XmlNode xml4 = getNode(xml3, "buttons");
+        XmlNode xml4 = getNode(xml3, "buttons");*/
         
 
 
