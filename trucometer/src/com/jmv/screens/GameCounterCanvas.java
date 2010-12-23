@@ -113,6 +113,13 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         createImages();
         // set config according the screen size
         setScreenConfig();
+
+          // generar Timer
+        timer = new Timer();
+
+        // generar ticker
+        ticker = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
+        timer.scheduleAtFixedRate(ticker, 0, 40);
         
     }
 
@@ -252,7 +259,7 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     }
 
     public void run() {
-        while (!isRunning) {
+        while (isRunning) {
             repaint();
             try {
                 Thread.sleep(40);
@@ -419,18 +426,11 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         // initialize the matches counter
         usrMatchesWin = rivalMatchesWin = 0;
 
-         // generar Timer
-        timer = new Timer();
-
-        // generar ticker
-        ticker = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
-        timer.scheduleAtFixedRate(ticker, 0, 40);
-
     }
 
     public void stop() {
         super.stop();
-        dispose();
+       // dispose();
     }
     
     public void reset(){
