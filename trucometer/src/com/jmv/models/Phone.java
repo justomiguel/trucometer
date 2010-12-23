@@ -81,7 +81,7 @@ public abstract class Phone {
 
         defaultBackGround = "/gameBackground.png";
         myBackGround = "";
-        fosforosUnderX = 200;
+        fosforosUnderX = 180;
         fosforosUnderY = 300;
 
     }
