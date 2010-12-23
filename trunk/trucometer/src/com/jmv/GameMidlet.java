@@ -1,14 +1,13 @@
 package com.jmv;
 
-import com.jmv.parsers.xml.GenericXmlParser;
+import com.jmv.models.Phone;
 import com.jmv.parsers.xml.XmlNode;
 import com.jmv.screens.GameCounterCanvas;
 import com.jmv.screens.Menu;
-import java.io.InputStreamReader;
+import com.jmv.screens.ScreenManager;
+import com.jmv.screens.UIOptions;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
-import org.kxml2.io.KXmlParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * Demo MIDlet creates, runs and displays GameCanvas.
@@ -18,16 +17,32 @@ import org.xmlpull.v1.XmlPullParserException;
  */
 public class GameMidlet extends MIDlet {
 
-    private Menu menu;
-    private Thread t;
-    public Display d;
+    // the manager for the mobile screen
+    private ScreenManager screenManager;
+
+    // the current instance of this midlet
+    public static GameMidlet instance;
+
+    // for the images position
+    public Phone mobile;
+
+    public GameMidlet() {
+        
+    }
 
     public void startApp() {
 
-        this.menu = new Menu(this);
-        d = Display.getDisplay(this);
-        d.setCurrent(menu);
+        instance = this;
+
+        Display.getDisplay(this).vibrate(2000);
+
+        this.screenManager = new ScreenManager(Display.getDisplay(this));
+        this.screenManager.registerScreen(ScreenManager.SCREEN_MENU, new Menu());
+        this.screenManager.registerScreen(ScreenManager.SCREEN_OPT, new UIOptions());
+        this.screenManager.registerScreen(ScreenManager.SCREEN_GAME, new GameCounterCanvas());
         
+        this.screenManager.changeScreen(ScreenManager.SCREEN_MENU);
+
        /* InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/PhoneConfigurations.xml"));
         KXmlParser parser = new KXmlParser();
         try {
@@ -50,6 +65,12 @@ public class GameMidlet extends MIDlet {
 
 
     }
+
+    public void changeScreen(String name) {
+        screenManager.changeScreen(name);
+    }
+
+    
 
     XmlNode getNode(XmlNode node, String search) {
         if (node == null) return null

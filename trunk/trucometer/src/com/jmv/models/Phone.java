@@ -6,7 +6,7 @@
 package com.jmv.models;
 
 import com.jmv.uicomponents.canvas.CanvasLine;
-import com.jmv.uicomponents.buttons.UIButton;
+import com.jmv.uicomponents.buttons.SingleButton;
 import com.jmv.uicomponents.canvas.CanvasImage;
 import com.jmv.uicomponents.canvas.CanvasString;
 import com.jmv.utils.Item;
@@ -21,16 +21,16 @@ public abstract class Phone {
     public int ancho;
 
     public CanvasImage menu_backGround;
-    public UIButton[] menu_botones;
+    public SingleButton[] menu_botones;
 
     public CanvasImage opciones_imgPosition;
     public CanvasString[] opciones_strings;
-    public UIButton[] opciones_botones;
+    public SingleButton[] opciones_botones;
 
     public int[] game_verticalLinesPosition;
     public int[] game_HorizontalLinesPosition;
     public CanvasString[] game_stringsPosition;
-    public UIButton[] game_botones;
+    public SingleButton[] game_botones;
     public CanvasImage game_titlePosition;
 
     public Item fosforosPositionU;
@@ -88,17 +88,17 @@ public abstract class Phone {
 
     
     protected abstract CanvasImage getInitialBackGround();
-    protected abstract UIButton[] getButtonsPosition();
+    protected abstract SingleButton[] getButtonsPosition();
 
     protected abstract int[] getVerticalGamesLinesPosition();
     protected abstract int[] getHorizontalGamesLinesPosition();
     protected abstract CanvasString[] getGamesStringsPosition();
     protected abstract CanvasImage getGameMainTitle();
-    protected abstract UIButton[] getGameButtonsPosition();
+    protected abstract SingleButton[] getGameButtonsPosition();
 
     protected abstract Item[] getSeparacionEntreFosforos();
 
-    protected abstract UIButton[] getOptionsButtons();
+    protected abstract SingleButton[] getOptionsButtons();
     protected abstract CanvasImage getOptionsImg();
     protected abstract CanvasString[] getOptionsStrings();
 

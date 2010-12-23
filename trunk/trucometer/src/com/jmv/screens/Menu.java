@@ -7,16 +7,9 @@ package com.jmv.screens;
 import com.jmv.GameMidlet;
 import com.jmv.models.Phone;
 import com.jmv.models.screenstyles.generic.NG320x240;
-import com.jmv.uicomponents.canvas.CanvasLine;
-import com.jmv.uicomponents.Marquesina;
-import com.jmv.uicomponents.buttons.UIButton;
-import com.jmv.uicomponents.canvas.CanvasString;
-import com.jmv.utils.IDestroyable;
+import com.jmv.uicomponents.buttons.SingleButton;
 import com.jmv.utils.ImageUtil;
 import java.io.IOException;
-import java.util.Timer;
-import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -24,59 +17,35 @@ import javax.microedition.lcdui.Image;
  *
  * @author justo.vargas
  */
-public class Menu extends Canvas implements IDestroyable {
+public class Menu extends Screen {
 
     // main image
     private Image mainTitle = null;
-    // the midlet instance
-    public GameMidlet midletInstance;
+
     // an int to know the current selection
     private int selectedOption = 1;
+
     // the game to lunch
     private GameCounterCanvas gameCanvas;
+
     // preferences
-    //private Preferences preferences;
     private UIOptions preferences;
+
     // if the phone is a touch one this var is going to be true
     private boolean isTactil;
-    // for the images position
-    public Phone mobile;
 
-    public Menu(GameMidlet inst) {
+    // configuration file
+    private Phone mobile;
+
+    public Menu() {
         setFullScreenMode(true);
-        midletInstance = inst;
         isTactil = hasPointerEvents();
         defineModel();
         setAnimations();
         getImages();
     }
 
-    protected void pointerPressed(int x, int y) {
-        if (x >= mobile.menu_botones[0].xPercent && x <= mobile.menu_botones[0].anchoPercent) {
-            if (y >= mobile.menu_botones[0].yPercent && y <= (mobile.menu_botones[0].yPercent + mobile.menu_botones[0].largoPercent)) {
-                //lamo al juego
-                mobile.menu_botones[0].seleccionado = true;
-                repaint();
-            } else if (y >= mobile.menu_botones[2].yPercent && y <= (mobile.menu_botones[2].yPercent + mobile.menu_botones[2].largoPercent)) {
-                mobile.menu_botones[2].seleccionado = true;
-                repaint();
-            }
-        }
-    }
-
-    protected void pointerReleased(int x, int y) {
-        if (x >= mobile.menu_botones[0].xPercent && x <= mobile.menu_botones[0].anchoPercent) {
-            if (y >= mobile.menu_botones[0].yPercent && y <= (mobile.menu_botones[0].yPercent + mobile.menu_botones[0].largoPercent)) {
-                //lamo al juego
-                //preferences = new Preferences(this, midletInstance);
-                preferences = new UIOptions(this, midletInstance);
-                midletInstance.d.setCurrent(preferences);
-                mobile.menu_botones[0].seleccionado = false;
-            } else if (y >= mobile.menu_botones[2].yPercent && y <= (mobile.menu_botones[2].yPercent + mobile.menu_botones[2].largoPercent)) {
-                destroy();
-                midletInstance.destroyApp(true);
-            }
-        }
+    public void init() {
     }
 
     protected void paint(Graphics g) {
@@ -86,19 +55,21 @@ public class Menu extends Canvas implements IDestroyable {
         g.setColor(0xFFFFFF);
         // dibujo recuadros interiores
         for (int i = 0; i < mobile.menu_botones.length; i++) {
-            UIButton object = mobile.menu_botones[i];
+            SingleButton object = mobile.menu_botones[i];
             if (object.seleccionado) {
                 g.setColor(object.colorSeleccionado);
-                g.setStrokeStyle(1);
-                g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
+            } else {
+                g.setColor(object.color);
             }
+            g.setStrokeStyle(1);
+            g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
         }
 
     }
 
     public void reset() {
         for (int i = 0; i < mobile.menu_botones.length; i++) {
-            UIButton object = mobile.menu_botones[i];
+            SingleButton object = mobile.menu_botones[i];
             if (i != 0) {
                 object.seleccionado = false;
             } else {
@@ -124,7 +95,7 @@ public class Menu extends Canvas implements IDestroyable {
                 if (selectedOption > 1) {
                     selectedOption--;
                     for (int i = 0; i < mobile.menu_botones.length; i++) {
-                        UIButton object = mobile.menu_botones[i];
+                        SingleButton object = mobile.menu_botones[i];
                         if (i == selectedOption - 1) {
                             object.seleccionado = true;
                         } else {
@@ -137,7 +108,7 @@ public class Menu extends Canvas implements IDestroyable {
                 if (selectedOption < 3) {
                     selectedOption++;
                     for (int i = 0; i < mobile.menu_botones.length; i++) {
-                        UIButton object = mobile.menu_botones[i];
+                        SingleButton object = mobile.menu_botones[i];
                         if (i == selectedOption - 1) {
                             object.seleccionado = true;
                         } else {
@@ -147,54 +118,82 @@ public class Menu extends Canvas implements IDestroyable {
                 }
                 break;
             case FIRE:
-                changeScreen();
+                goToScreen();
                 break;
         }
         repaint();
     }
 
-    private void changeScreen() {
+    private void goToScreen() {
         switch (selectedOption) {
             case 1:
                 //preferences = new Preferences(this, midletInstance);
-                preferences = new UIOptions(this, midletInstance);
-                midletInstance.d.setCurrent(preferences);
+                GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
                 break;
             case 2:
                 break;
             case 3:
-                destroy();
-                midletInstance.destroyApp(true);
+                 GameMidlet.instance.destroyApp(true);
                 break;
         }
     }
 
-    public void destroy() {
-        gameCanvas = null;
-        preferences = null;
-    }
-
     private void setAnimations() {
         // for default select the first option
-        UIButton object = mobile.menu_botones[0];
+        SingleButton object = mobile.menu_botones[0];
         object.seleccionado = true;
     }
 
     private void defineModel() {
+        
         mobile = new NG320x240();
+        // update the configuration var
+        GameMidlet.instance.mobile = mobile;
+
         // set the buttons according to this screen;
         int ancho = this.getWidth();
         int alto = this.getHeight();
 
         if (isTactil) {
-            UIButton button;
+            SingleButton button;
             for (int i = 0; i < mobile.menu_botones.length; i++) {
                 button = mobile.menu_botones[i];
-                button.xPercent = button.xPercent * ancho / 100;
-                button.yPercent = button.yPercent * alto / 100;
-                button.anchoPercent = button.anchoPercent * ancho / 100;
-                button.largoPercent = button.largoPercent * alto / 100;
+                button.updateSize(alto, ancho);
             }
         }
+    }
+
+    public void run() {
+    }
+
+
+    // pointer events
+    protected void pointerPressed(int x, int y) {
+        if (mobile.menu_botones[0].hitTestPoint(x, y)) {
+            //lamo al juego
+            mobile.menu_botones[0].seleccionado = true;
+        } else if (mobile.menu_botones[2].hitTestPoint(x, y)) {
+            mobile.menu_botones[2].seleccionado = true;
+        }
+        repaint();
+    }
+
+    protected void pointerReleased(int x, int y) {
+        if (mobile.menu_botones[0].hitTestPoint(x, y)) {
+            mobile.menu_botones[0].seleccionado = false;
+            //lamo al juego
+            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+        } else if (mobile.menu_botones[2].hitTestPoint(x, y)) {
+             GameMidlet.instance.destroyApp(true);
+        }
+        repaint();
+
+    }
+
+    // kill this class
+        public void dispose() {
+        gameCanvas = null;
+        preferences = null;
+        mobile = null;
     }
 }
