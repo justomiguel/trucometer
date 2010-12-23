@@ -79,8 +79,8 @@ public class NG320x240 extends Phone {
             //string de abajo
             new CanvasString(6, 80, "Partidos"),
             // contador de partido
-            new CanvasString(55, 77, "usr"),
-            new CanvasString(55, 83, "rival"),
+            new CanvasString(54, 77, "usr"),
+            new CanvasString(54, 83, "rival"),
             new CanvasString(17, 93, "Atras")};
         return result;
     }

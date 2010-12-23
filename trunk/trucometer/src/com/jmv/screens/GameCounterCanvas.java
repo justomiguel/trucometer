@@ -71,8 +71,10 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     private boolean interrupted = false;
     private boolean isTactil;
     private boolean givePoints;
+    
     private int usrMatchesWin;
     private int rivalMatchesWin;
+    
     private Image winnerImage;
     private boolean thereIsAWinner = false;
     private String winner;
@@ -230,9 +232,17 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
             g.drawImage(winnerImage, 0, 0, Graphics.TOP | Graphics.LEFT);
             g.setColor(0x000000);
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_ITALIC, Font.SIZE_SMALL));
-            g.drawString(winner, 20, 209, Graphics.TOP | Graphics.LEFT);
-            g.setFont(Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL));
-            g.drawString(winnerLegend,70, 227, Graphics.TOP | Graphics.LEFT);
+            g.drawString(winner, 32, 199, Graphics.TOP | Graphics.LEFT);
+            g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_BOLD, Font.SIZE_SMALL));
+            g.drawString("vs", 85, 218, Graphics.TOP | Graphics.LEFT);
+            g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_ITALIC, Font.SIZE_SMALL));
+            if (winner.equals(nombreTeamUsr)){
+                g.drawString(nombreTeamRival, 115, 229, Graphics.TOP | Graphics.LEFT);
+            } else {
+                g.drawString(nombreTeamUsr, 115, 229, Graphics.TOP | Graphics.LEFT);
+            }
+            g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_BOLD, Font.SIZE_SMALL));
+            g.drawString(winnerLegend,70, 251, Graphics.TOP | Graphics.LEFT);
             enabled = false;
         }
     }
@@ -543,11 +553,9 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
     private void setWinner(String string) {
         winner = string;
-        if (winner.equals(nombreTeamUsr)){
-            winner += " gano a "+nombreTeamRival;
+        if (winner.equals(nombreTeamUsr)){;
             winnerLegend = "Por "+tantoUSR+" a "+tantoRival;
         } else {
-            winner += " gano a  "+nombreTeamUsr;
             winnerLegend = "Por "+tantoRival+" a "+tantoUSR;
         }
         thereIsAWinner = true;
