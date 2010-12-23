@@ -185,8 +185,8 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
                
             }
             this.t = null;
-             this.t = new Thread(gameCanvas);
-             this.t.start();
+            this.t = new Thread(gameCanvas);
+            this.t.start();
             this.gameCanvas.init(this);
 
             midletInstance.d.setCurrent(gameCanvas);
