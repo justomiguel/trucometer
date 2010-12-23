@@ -6,7 +6,7 @@ package com.jmv.models.screenstyles.generic;
 
 import com.jmv.models.Phone;
 import com.jmv.uicomponents.canvas.CanvasLine;
-import com.jmv.uicomponents.buttons.UIButton;
+import com.jmv.uicomponents.buttons.SingleButton;
 import com.jmv.uicomponents.canvas.CanvasImage;
 import com.jmv.uicomponents.canvas.CanvasString;
 import com.jmv.utils.Item;
@@ -40,20 +40,20 @@ public class NG320x240 extends Phone {
 
     }
 
-    protected UIButton[] getButtonsPosition() {
-        UIButton[] result = {
-            new UIButton(30, 68, 40, 8, 0x585858, 0xA4A4A4),
-            new UIButton(30, 77, 40, 8, 0x585858, 0xA4A4A4),
-            new UIButton(30, 86, 40, 8, 0x585858, 0xA4A4A4)
+    protected SingleButton[] getButtonsPosition() {
+        SingleButton[] result = {
+            new SingleButton(30, 68, 40, 8, 0x585858, 0xA4A4A4),
+            new SingleButton(30, 77, 40, 8, 0x585858, 0xA4A4A4),
+            new SingleButton(30, 86, 40, 8, 0x585858, 0xA4A4A4)
         };
         return result;
     }
 
-    protected UIButton[] getGameButtonsPosition() {
-       UIButton[] result = {new UIButton(0,90,50,11,0x009900,0xFFFF99),
+    protected SingleButton[] getGameButtonsPosition() {
+       SingleButton[] result = {new SingleButton(0,90,50,11,0x009900,0xFFFF99),
        // separaion de canchas
-       new UIButton(0,26,50,50,0x009900,0xFFFF99),
-       new UIButton(50,26,50,50,0x009900,0xFFFF99)};
+       new SingleButton(0,26,50,50,0x009900,0xFFFF99),
+       new SingleButton(50,26,50,50,0x009900,0xFFFF99)};
         return result;
     }
 
@@ -91,13 +91,13 @@ public class NG320x240 extends Phone {
         return result;
     }
 
-    protected UIButton[] getOptionsButtons() {
+    protected SingleButton[] getOptionsButtons() {
         // the textfields on the screen
-        UIButton[] result = {
-            new UIButton(21, 32, 71, 8, 0xFFFFFF, 0xFFFFFF),
-            new UIButton(21, 53, 71, 8, 0xFFFFFF, 0xFFFFFF),
-            new UIButton(0, 92, 50, 8, 0xFFFFFF, 0x733213),
-            new UIButton(50, 92, 50, 8, 0xFFFFFF, 0x733213)
+        SingleButton[] result = {
+            new SingleButton(21, 32, 71, 8, 0xFFFFFF, 0xFFFFFF),
+            new SingleButton(21, 53, 71, 8, 0xFFFFFF, 0xFFFFFF),
+            new SingleButton(0, 92, 50, 8, 0xFFFFFF, 0x733213),
+            new SingleButton(50, 92, 50, 8, 0xFFFFFF, 0x733213)
         };
         return result;
     }

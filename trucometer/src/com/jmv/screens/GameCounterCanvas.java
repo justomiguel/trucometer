@@ -4,16 +4,14 @@
  */
 package com.jmv.screens;
 
+import com.jmv.GameMidlet;
 import com.jmv.models.Phone;
 import com.jmv.settings.Settings;
-import com.jmv.uicomponents.canvas.CanvasLine;
 import com.jmv.uicomponents.Fosforos;
 import com.jmv.uicomponents.Marquesina;
-import com.jmv.uicomponents.IScreenElement;
-import com.jmv.uicomponents.buttons.UIButton;
+import com.jmv.uicomponents.buttons.SingleButton;
 import com.jmv.utils.IDestroyable;
 import com.jmv.utils.ImageUtil;
-import com.jmv.utils.Item;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
@@ -30,88 +28,98 @@ import javax.microedition.lcdui.game.Sprite;
  *
  * @author justo.vargas
  */
-public class GameCounterCanvas extends Canvas implements Runnable, CommandListener, IDestroyable {
+public class GameCounterCanvas extends Screen implements CommandListener {
 
     // referencias a los fosforos
     private Fosforos[] tantos = null;
     private Fosforos tantoTactil;
+
     // imagenes de tantos
     private Image IMAGE_UP;
     private Image IMAGE_DIAG;
     private Image IMAGE_SUP;
     private Image IMAGE_SDIAG;
+
     // background images
     private Image mainBackGround;
     private Image mainTitle;
+
     // para manejar los tantos
     private int tantoUSR;
     private int tantoRival;
+
     // image coordinates
     private int posXTantoTactil = 0;
     private int posYTantoTactil = 0;
+
     // screen size
     private int ancho;
     private int alto;
+
     // team players
     private String nombreTeamUsr;
     private String nombreTeamRival;
+
     // comandos
     private Command exitCommand;
-    // back screen
-    private UIOptions preferencesInstance = null;
+    
     // fonts management
     private Font font = null;
+
     // configuration
     private Phone mobile;
+
     //manager for the animations
     private Timer timer;
+
     // my ticker
     private Marquesina ticker;
+
     // boolean vars
-    private boolean interrupted = false;
     private boolean isTactil;
     private boolean givePoints;
-    
+
+    // winning vars
     private int usrMatchesWin;
     private int rivalMatchesWin;
-    
+    // winner image
     private Image winnerImage;
+    // when the game ends
     private boolean thereIsAWinner = false;
+    // the winner's name an a legend
     private String winner;
-    private boolean enabled;
     private String winnerLegend;
+    
+    // if the current class is enabled
+    private boolean enabled;
 
-    public GameCounterCanvas(UIOptions inst) {
+    public GameCounterCanvas() {
 
         setFullScreenMode(true);
         enabled = true;
         ancho = this.getWidth();
         alto = this.getHeight();
+
+        // set commands
+        // add commands
+        exitCommand = new Command("Go Back", Command.EXIT, 0);
+        this.addCommand(exitCommand);
+        this.setCommandListener(this);
+
         // get config
-        mobile = inst.backScreen.mobile;
+        mobile = GameMidlet.instance.mobile;
         isTactil = hasPointerEvents();
         // create images
         createImages();
         // set config according the screen size
         setScreenConfig();
         
-
-    }
-
-    public void log(String o) {
-        System.out.println(o);
-    }
-
-    private void log(int indice) {
-        System.out.println("log " + indice);
     }
 
     protected void pointerPressed(int x, int y) {
         if (enabled) {
-            if ((x > mobile.game_botones[0].xPercent) && x < (mobile.game_botones[0].xPercent + mobile.game_botones[0].anchoPercent)) {
-                if (y > (mobile.game_botones[0].yPercent) && (y < (mobile.game_botones[0].yPercent + mobile.game_botones[0].largoPercent))) {
+            if (mobile.game_botones[0].hitTestPoint(x, y)) {
                     mobile.game_botones[0].seleccionado = true;
-                }
             } else if (x > mobile.fosforosUnderX && x < this.ancho) {
                 if (y > mobile.fosforosUnderY) {
                     givePoints = true;
@@ -123,30 +131,24 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
 
     protected void pointerReleased(int x, int y) {
         if (enabled) {
-            if (((x > mobile.game_botones[0].xPercent) && x < (mobile.game_botones[0].xPercent + mobile.game_botones[0].anchoPercent)) && (y > (mobile.game_botones[0].yPercent) && (y < (mobile.game_botones[0].yPercent + mobile.game_botones[0].largoPercent)))) {
-                interrupted = true;
-                preferencesInstance.midletInstance.d.setCurrent(preferencesInstance);
+            if (mobile.game_botones[0].hitTestPoint(x, y)) {
+                GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
                 mobile.game_botones[0].seleccionado = false;
             } else {
                 if (givePoints) {
-                    if ((x > mobile.game_botones[1].xPercent) && (x < (mobile.game_botones[1].xPercent + mobile.game_botones[1].anchoPercent))) {
-                        if (y > (mobile.game_botones[1].yPercent) && (y < (mobile.game_botones[1].yPercent + mobile.game_botones[1].largoPercent))) {
+                    if (mobile.game_botones[1].hitTestPoint(x, y)) {
                             if (tantoUSR < 15) {
                                 tantoUSR++;
                             }
-                        }
-                    } else if ((x > mobile.game_botones[2].xPercent) && x < (mobile.game_botones[2].xPercent + mobile.game_botones[2].anchoPercent)) {
-                        if (y > (mobile.game_botones[2].yPercent) && (y < (mobile.game_botones[2].yPercent + mobile.game_botones[2].largoPercent))) {
+                    } else if (mobile.game_botones[2].hitTestPoint(x, y)) {
                             if (tantoRival < 15) {
                                 tantoRival++;
                             }
-                        }
                     }
                     givePoints = false;
                     posXTantoTactil = -tantoTactil.getWidth();
                     posYTantoTactil = -tantoTactil.getHeight();
                 }
-
             }
         } else {
                 thereIsAWinner = false;
@@ -170,20 +172,22 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         //g.drawImage(background, 0, 0, Graphics.TOP | Graphics.LEFT);
         // dibujo recuadros interiores
         if (isTactil) {
-            UIButton object;
+            SingleButton object;
             for (int i = 0; i < mobile.game_botones.length; i++) {
                 object = mobile.game_botones[i];
                 if (object.seleccionado) {
                     g.setColor(object.colorSeleccionado);
-                    g.fillRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
+                } else {
+                    g.setColor(object.color);
                 }
-                g.setColor(0xFFFFFF);
+                g.setStrokeStyle(1);
                 g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
             }
         }
         // guardar en constantes
         int percent;
         g.setColor(0xFFFFFF);
+        g.setStrokeStyle(0);
 
         // dibujo verticales
         for (int i = 0; i < mobile.game_verticalLinesPosition.length; i++) {
@@ -248,7 +252,7 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     public void run() {
-        while (!interrupted) {
+        while (!isRunning) {
             repaint();
             try {
                 Thread.sleep(40);
@@ -309,12 +313,15 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     public void commandAction(Command c, Displayable d) {
-        if (enabled) {
             if (c == exitCommand) {
-                interrupted = true;
-                preferencesInstance.midletInstance.d.setCurrent(preferencesInstance);
+                if (enabled){
+                    GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+                } else {
+                    // remove the winner image and continue
+                    thereIsAWinner = false;
+                    enabled = true;
+                }
             }
-        }
     }
 
     private void createImages() {
@@ -396,18 +403,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         }
     }
 
-    public void destroy() {
-        preferencesInstance = null;
-        //okCommand = null;
-        exitCommand = null;
-        timer = null;
-        ticker = null;
 
-    }
-
-    public void init(UIOptions inst) {
-        // screen to go...
-        preferencesInstance = inst;
+    public void init() {
 
         // the names of the teams
         nombreTeamRival = Settings.configuration().getRivalTeam();
@@ -419,12 +416,8 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         // usr & rival count
         tantoRival = tantoUSR = 0;
 
-        // add commands
-        exitCommand = new Command("Go Back", Command.EXIT, 0);
-        this.addCommand(exitCommand);
-        this.setCommandListener(this);
-
-        interrupted = false;
+        // initialize the matches counter
+        usrMatchesWin = rivalMatchesWin = 0;
 
          // generar Timer
         timer = new Timer();
@@ -436,11 +429,15 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
     }
 
     public void stop() {
-        timer.cancel();
-        interrupted = true;
-        this.removeCommand(exitCommand);
-        destroy();
+        super.stop();
+        dispose();
     }
+    
+    public void reset(){
+        super.reset();
+    }
+
+
 
     private void drawFosforos(Graphics g) {
 
@@ -532,20 +529,13 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         }
     }
 
-    private void log(boolean b) {
-        System.out.println(b);
-    }
-
     private void setScreenConfig() {
         // set the buttons according to this screen;
         if (isTactil) {
-            UIButton button;
+            SingleButton button;
             for (int i = 0; i < mobile.game_botones.length; i++) {
                 button = mobile.game_botones[i];
-                button.xPercent = button.xPercent * ancho / 100;
-                button.yPercent = button.yPercent * alto / 100;
-                button.anchoPercent = button.anchoPercent * ancho / 100;
-                button.largoPercent = button.largoPercent * alto / 100;
+                button.updateSize(alto, ancho);
             }
         }
         mobile.separate = mobile.separate * alto / 100;
@@ -561,5 +551,10 @@ public class GameCounterCanvas extends Canvas implements Runnable, CommandListen
         thereIsAWinner = true;
         tantoUSR = 0;
         tantoRival = 0;
+    }
+
+    public void dispose() {
+        timer = null;
+        ticker = null;
     }
 }

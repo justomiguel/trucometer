@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.jmv.screens;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
+import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 
 /**
@@ -14,22 +15,48 @@ import javax.microedition.lcdui.Displayable;
  */
 public class ScreenManager {
 
-    public Hashtable screens;
+    public static final String SCREEN_MENU = "menu";
+    public static final String SCREEN_OPT = "opciones";
+    public static final String SCREEN_GAME = "game";
 
-    public ScreenManager() {
+    private Hashtable screens;
+    private Screen currentScreen;
+    private Thread currentThreadScreen;
+    private Display display;
+
+    public ScreenManager(Display display) {
         this.screens = new Hashtable();
+        this.display = display;
     }
 
-    public void registerScreen(String name, Displayable screen){
+    public void registerScreen(String name, Displayable screen) {
         screens.put(name, screen);
     }
 
-    public Displayable getScreen(String name){
-        return (Displayable) screens.get(name);
+    public Screen getScreen(String name) {
+        return (Screen) screens.get(name);
     }
 
+    public void initScreens() {
+        // recorrer un Hashtable
+        for (Enumeration e = screens.keys(); e.hasMoreElements();) {
+            String clave = (String) e.nextElement();
+            Screen screen = (Screen) screens.get(clave);
+            screen.init();
+        }
+    }
 
-
-
-
+    public void changeScreen(String name) {
+        Screen newScreen = getScreen(name);
+        newScreen.reset();
+        if (currentScreen != null) {
+            currentScreen.stop();
+        }
+        this.currentThreadScreen = null;
+        display.setCurrent(newScreen);
+        this.currentThreadScreen = new Thread(newScreen);
+        this.currentThreadScreen.start();
+        currentScreen = newScreen;
+        newScreen.init();
+    }
 }
