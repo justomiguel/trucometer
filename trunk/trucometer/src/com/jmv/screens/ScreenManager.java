@@ -54,9 +54,12 @@ public class ScreenManager {
         }
         this.currentThreadScreen = null;
         display.setCurrent(newScreen);
-        this.currentThreadScreen = new Thread(newScreen);
-        this.currentThreadScreen.start();
+
         currentScreen = newScreen;
+
+        this.currentThreadScreen = new Thread(currentScreen);
+        this.currentThreadScreen.start();
+
         newScreen.init();
     }
 }
