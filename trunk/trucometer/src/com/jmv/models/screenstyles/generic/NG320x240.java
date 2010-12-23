@@ -87,7 +87,7 @@ public class NG320x240 extends Phone {
 
     protected Item[] getSeparacionEntreFosforos() {
         // the distance between the fosforos
-        Item[] result = {new Item(16, 16)};
+        Item[] result = {new Item(17, 14)};
         return result;
     }
 

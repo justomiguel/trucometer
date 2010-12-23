@@ -182,10 +182,13 @@ public class UIOptions extends Canvas implements IDestroyable, CommandListener {
             Settings.configuration().setUsrTeam(usrTeam.name);
             if (gameCanvas == null) {
                 this.gameCanvas = new GameCounterCanvas(this);
-                this.t = new Thread(gameCanvas);
-                this.t.start();
+               
             }
+            this.t = null;
+             this.t = new Thread(gameCanvas);
+             this.t.start();
             this.gameCanvas.init(this);
+
             midletInstance.d.setCurrent(gameCanvas);
         } else if (c == exitCommand) {
              //lamo al juego
