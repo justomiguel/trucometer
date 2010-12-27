@@ -130,12 +130,12 @@ public class Menu extends Screen {
         switch (selectedOption) {
             case 1:
                 //preferences = new Preferences(this, midletInstance);
-                GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+                GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
                 break;
             case 2:
                 break;
             case 3:
-                 GameMidlet.instance.destroyApp(true);
+                 ((GameMidlet) GameMidlet.instance).dispose();
                 break;
         }
     }
@@ -184,9 +184,9 @@ public class Menu extends Screen {
         if (mobile.menu_botones[0].hitTestPoint(x, y)) {
             mobile.menu_botones[0].seleccionado = false;
             //lamo al juego
-            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+            GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
         } else if (mobile.menu_botones[2].hitTestPoint(x, y)) {
-             GameMidlet.instance.destroyApp(true);
+              ((GameMidlet) GameMidlet.instance).dispose();
         }
         repaint();
 

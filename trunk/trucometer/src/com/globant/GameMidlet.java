@@ -1,13 +1,9 @@
 package com.globant;
 
-import com.globant.models.Phone;
-import com.globant.gj2framework.animation.xml.XmlNode;
+import com.globant.gj2framework.base.BaseMidlet;
 import com.globant.screens.GameCounterCanvas;
 import com.globant.screens.Menu;
-import com.globant.gj2framework.screens.ScreenManager;
 import com.globant.screens.UIOptions;
-import javax.microedition.midlet.*;
-import javax.microedition.lcdui.*;
 
 /**
  * Demo MIDlet creates, runs and displays GameCanvas.
@@ -15,80 +11,36 @@ import javax.microedition.lcdui.*;
  * @author  Justo Vargas
  * @version 1.0
  */
-public class GameMidlet extends MIDlet {
+public class GameMidlet extends BaseMidlet {
 
-    // the manager for the mobile screen
-    private ScreenManager screenManager;
-
-    // the current instance of this midlet
-    public static GameMidlet instance;
-
-    // for the images position
-    public Phone mobile;
+    // game screens
+    public static final String SCREEN_MENU = "menu";
+    public static final String SCREEN_OPT = "opciones";
+    public static final String SCREEN_GAME = "game";
 
     public GameMidlet() {
+        super();
+        // set the instance to this
+        instance = this;
+
+        // define the screens
+        this.screenManager.registerScreen(GameMidlet.SCREEN_MENU, new Menu());
+        this.screenManager.registerScreen(GameMidlet.SCREEN_OPT, new UIOptions());
+        this.screenManager.registerScreen(GameMidlet.SCREEN_GAME, new GameCounterCanvas());
         
+        screenManager.changeScreen(SCREEN_MENU);
     }
 
     public void startApp() {
-
-        instance = this;
-
-        Display.getDisplay(this).vibrate(2000);
-
-        this.screenManager = new ScreenManager(Display.getDisplay(this));
-        this.screenManager.registerScreen(ScreenManager.SCREEN_MENU, new Menu());
-        this.screenManager.registerScreen(ScreenManager.SCREEN_OPT, new UIOptions());
-        this.screenManager.registerScreen(ScreenManager.SCREEN_GAME, new GameCounterCanvas());
-        
-        this.screenManager.changeScreen(ScreenManager.SCREEN_MENU);
-
-       /* InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/PhoneConfigurations.xml"));
-        KXmlParser parser = new KXmlParser();
-        try {
-            parser.setInput(reader);
-        } catch (XmlPullParserException ex) {
-            ex.printStackTrace();
-        }
-        GenericXmlParser gParser = new GenericXmlParser();
-        XmlNode xml = null;
-        try {
-            xml = gParser.parseXML(parser, true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        System.out.print("value: " + "");
-        XmlNode xml2 = getNode(xml, "d320x240");
-        XmlNode xml3 = getNode(xml2, "options");
-        XmlNode xml4 = getNode(xml3, "buttons");*/
-        
-
-
-    }
-
-    public void changeScreen(String name) {
-        screenManager.changeScreen(name);
-    }
-
-    
-
-    XmlNode getNode(XmlNode node, String search) {
-        if (node == null) return null
-                ;
-        if (node.nodeName.equals(search)) {
-            return node;
-        }
-        for (int i = 0; i < node.children.size(); i++) {
-            getNode((XmlNode) node.children.elementAt(i), search);
-        }
-        return null;
+        super.startApp();
     }
 
     public void pauseApp() {
+        super.pauseApp();
     }
 
-    public void destroyApp(boolean unconditional) {
-        //this.gameCanvas.stop();
-        this.notifyDestroyed();
+    public void dispose() {
+        super.dispose();
     }
+
 }

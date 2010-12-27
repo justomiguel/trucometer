@@ -15,18 +15,25 @@ import javax.microedition.lcdui.Displayable;
  */
 public class ScreenManager {
 
-    public static final String SCREEN_MENU = "menu";
-    public static final String SCREEN_OPT = "opciones";
-    public static final String SCREEN_GAME = "game";
-
+    // a collection to save references to the game screens
     private Hashtable screens;
+
+    // the current screen
     private Screen currentScreen;
+
+    // the current thread that manage the screen
     private Thread currentThreadScreen;
+
+    // the display
     private Display display;
+
+    // pause state
+    protected boolean onPause;
 
     public ScreenManager(Display display) {
         this.screens = new Hashtable();
         this.display = display;
+        onPause = false;
     }
 
     public void registerScreen(String name, Displayable screen) {
@@ -48,18 +55,54 @@ public class ScreenManager {
 
     public void changeScreen(String name) {
         Screen newScreen = getScreen(name);
-        newScreen.reset();
-        if (currentScreen != null) {
-            currentScreen.stop();
+        if (newScreen != currentScreen) {
+            newScreen.reset();
+            if (currentScreen != null) {
+                currentScreen.stop();
+            }
+            this.currentThreadScreen = null;
+            display.setCurrent(newScreen);
+
+            currentScreen = newScreen;
+
+            this.currentThreadScreen = new Thread(currentScreen);
+            this.currentThreadScreen.start();
+
+            newScreen.init();
         }
-        this.currentThreadScreen = null;
-        display.setCurrent(newScreen);
+    }
 
-        currentScreen = newScreen;
+    public boolean isOnPause() {
+        return onPause;
+    }
 
-        this.currentThreadScreen = new Thread(currentScreen);
-        this.currentThreadScreen.start();
+    public void setOnPause(boolean onPause) {
+        this.onPause = onPause;
+        if (onPause){
+            currentScreen.stop();
+            this.currentThreadScreen = null;
+        } else {
+            currentScreen.reset();
+            display.setCurrent(currentScreen);
+            this.currentThreadScreen = new Thread(currentScreen);
+            this.currentThreadScreen.start();
+        }
+    }
 
-        newScreen.init();
+    public String getCurrentScreenName() {
+        return currentScreen.getName();
+    }
+
+    public Screen getCurrentScreen() {
+        return currentScreen;
+    }
+
+    public void dispose() {
+        // recorrer un Hashtable
+        for (Enumeration e = screens.keys(); e.hasMoreElements();) {
+            String clave = (String) e.nextElement();
+            Screen screen = (Screen) screens.get(clave);
+            screen.dispose();
+        }
     }
 }

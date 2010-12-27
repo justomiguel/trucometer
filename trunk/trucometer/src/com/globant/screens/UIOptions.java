@@ -119,12 +119,12 @@ public class UIOptions extends Screen implements CommandListener {
             Settings.configuration().setEnd_game(15);
             Settings.configuration().setRivalTeam(rivalTeam.name);
             Settings.configuration().setUsrTeam(usrTeam.name);
-            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_GAME);
+            GameMidlet.instance.changeScreen(GameMidlet.SCREEN_GAME);
 
         } else if (c == exitCommand) {
             //lamo al juego
             GameMidlet.instance.mobile.opciones_botones[2].seleccionado = false;
-            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_MENU);
+            GameMidlet.instance.changeScreen(GameMidlet.SCREEN_MENU);
         }
     }
 
@@ -177,7 +177,7 @@ public class UIOptions extends Screen implements CommandListener {
         } else if (GameMidlet.instance.mobile.opciones_botones[2].hitTestPoint(x, y)) {
             //lamo al juego
             GameMidlet.instance.mobile.opciones_botones[2].seleccionado = false;
-            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_MENU);
+            GameMidlet.instance.changeScreen(GameMidlet.SCREEN_MENU);
 
         } else if (GameMidlet.instance.mobile.opciones_botones[3].hitTestPoint(x, y)) {
             //llamo al juego
@@ -185,7 +185,7 @@ public class UIOptions extends Screen implements CommandListener {
             Settings.configuration().setEnd_game(15);
             Settings.configuration().setRivalTeam(rivalTeam.name);
             Settings.configuration().setUsrTeam(usrTeam.name);
-            GameMidlet.instance.changeScreen(ScreenManager.SCREEN_GAME);
+            GameMidlet.instance.changeScreen(GameMidlet.SCREEN_GAME);
         }
         repaint();
     }

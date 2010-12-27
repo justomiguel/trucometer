@@ -139,7 +139,7 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     protected void pointerReleased(int x, int y) {
         if (enabled) {
             if (mobile.game_botones[0].hitTestPoint(x, y)) {
-                GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+                GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
                 mobile.game_botones[0].seleccionado = false;
             } else {
                 if (givePoints) {
@@ -322,7 +322,7 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     public void commandAction(Command c, Displayable d) {
             if (c == exitCommand) {
                 if (enabled){
-                    GameMidlet.instance.changeScreen(ScreenManager.SCREEN_OPT);
+                    GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
                 } else {
                     // remove the winner image and continue
                     thereIsAWinner = false;
@@ -556,5 +556,6 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     public void dispose() {
         timer = null;
         ticker = null;
+        isRunning = false;
     }
 }
