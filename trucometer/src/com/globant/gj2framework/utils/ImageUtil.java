@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.globant.utils;
+package com.globant.gj2framework.utils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
