@@ -1,11 +1,11 @@
-package com.jmv;
+package com.globant;
 
-import com.jmv.models.Phone;
-import com.jmv.parsers.xml.XmlNode;
-import com.jmv.screens.GameCounterCanvas;
-import com.jmv.screens.Menu;
-import com.jmv.screens.ScreenManager;
-import com.jmv.screens.UIOptions;
+import com.globant.models.Phone;
+import com.globant.parsers.xml.XmlNode;
+import com.globant.screens.GameCounterCanvas;
+import com.globant.screens.Menu;
+import com.globant.screens.ScreenManager;
+import com.globant.screens.UIOptions;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 

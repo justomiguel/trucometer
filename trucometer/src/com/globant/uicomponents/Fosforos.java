@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.jmv.uicomponents;
+package com.globant.uicomponents;
 
 import javax.microedition.lcdui.Image;
 

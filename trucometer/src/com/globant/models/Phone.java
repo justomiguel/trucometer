@@ -3,13 +3,13 @@
  * and open the template in the editor.
  */
 
-package com.jmv.models;
+package com.globant.models;
 
-import com.jmv.uicomponents.canvas.CanvasLine;
-import com.jmv.uicomponents.buttons.SingleButton;
-import com.jmv.uicomponents.canvas.CanvasImage;
-import com.jmv.uicomponents.canvas.CanvasString;
-import com.jmv.utils.Item;
+import com.globant.uicomponents.canvas.CanvasLine;
+import com.globant.uicomponents.buttons.SingleButton;
+import com.globant.uicomponents.canvas.CanvasImage;
+import com.globant.uicomponents.canvas.CanvasString;
+import com.globant.utils.Item;
 
 /**
  *

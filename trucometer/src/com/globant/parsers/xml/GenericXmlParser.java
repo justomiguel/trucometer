@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jmv.parsers.xml;
+package com.globant.parsers.xml;
 
 import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParser;
