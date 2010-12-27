@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.jmv.settings;
+package com.globant.settings;
 
 /**
  *

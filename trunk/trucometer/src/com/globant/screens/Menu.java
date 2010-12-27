@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jmv.screens;
+package com.globant.screens;
 
-import com.jmv.GameMidlet;
-import com.jmv.models.Phone;
-import com.jmv.models.screenstyles.generic.NG320x240;
-import com.jmv.uicomponents.buttons.SingleButton;
-import com.jmv.utils.ImageUtil;
+import com.globant.GameMidlet;
+import com.globant.models.Phone;
+import com.globant.models.screenstyles.generic.NG320x240;
+import com.globant.uicomponents.buttons.SingleButton;
+import com.globant.utils.ImageUtil;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;

@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jmv.models.screenstyles.generic;
+package com.globant.models.screenstyles.generic;
 
-import com.jmv.models.Phone;
-import com.jmv.uicomponents.canvas.CanvasLine;
-import com.jmv.uicomponents.buttons.SingleButton;
-import com.jmv.uicomponents.canvas.CanvasImage;
-import com.jmv.uicomponents.canvas.CanvasString;
-import com.jmv.utils.Item;
+import com.globant.models.Phone;
+import com.globant.uicomponents.canvas.CanvasLine;
+import com.globant.uicomponents.buttons.SingleButton;
+import com.globant.uicomponents.canvas.CanvasImage;
+import com.globant.uicomponents.canvas.CanvasString;
+import com.globant.utils.Item;
 
 /**
  *

@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jmv.uicomponents.buttons;
+package com.globant.uicomponents.buttons;
 
-import com.jmv.uicomponents.IScreenElement;
+import com.globant.uicomponents.IScreenElement;
 
 /**
  *

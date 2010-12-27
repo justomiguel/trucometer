@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jmv.screens;
+package com.globant.screens;
 
-import com.jmv.GameMidlet;
-import com.jmv.models.Phone;
-import com.jmv.settings.Settings;
-import com.jmv.uicomponents.buttons.SingleButton;
-import com.jmv.uicomponents.canvas.CanvasString;
-import com.jmv.utils.IDestroyable;
-import com.jmv.utils.ImageUtil;
+import com.globant.GameMidlet;
+import com.globant.models.Phone;
+import com.globant.settings.Settings;
+import com.globant.uicomponents.buttons.SingleButton;
+import com.globant.uicomponents.canvas.CanvasString;
+import com.globant.utils.IDestroyable;
+import com.globant.utils.ImageUtil;
 import java.io.IOException;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
