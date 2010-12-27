@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.globant.screens;
+package com.globant.gj2framework.screens;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

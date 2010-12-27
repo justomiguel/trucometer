@@ -5,10 +5,9 @@
 
 package com.globant.models;
 
-import com.globant.uicomponents.canvas.CanvasLine;
-import com.globant.uicomponents.buttons.SingleButton;
-import com.globant.uicomponents.canvas.CanvasImage;
-import com.globant.uicomponents.canvas.CanvasString;
+import com.globant.gj2framework.screens.uielements.SingleButton;
+import com.globant.gj2framework.screens.uielements.CanvasImage;
+import com.globant.gj2framework.screens.uielements.CanvasString;
 import com.globant.utils.Item;
 
 /**

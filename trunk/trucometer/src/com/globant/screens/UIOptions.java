@@ -4,15 +4,14 @@
  */
 package com.globant.screens;
 
+import com.globant.gj2framework.screens.ScreenManager;
+import com.globant.gj2framework.screens.Screen;
 import com.globant.GameMidlet;
-import com.globant.models.Phone;
 import com.globant.settings.Settings;
-import com.globant.uicomponents.buttons.SingleButton;
-import com.globant.uicomponents.canvas.CanvasString;
-import com.globant.utils.IDestroyable;
-import com.globant.utils.ImageUtil;
+import com.globant.gj2framework.screens.uielements.SingleButton;
+import com.globant.gj2framework.screens.uielements.CanvasString;
+import com.globant.gj2framework.utils.ImageUtil;
 import java.io.IOException;
-import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;

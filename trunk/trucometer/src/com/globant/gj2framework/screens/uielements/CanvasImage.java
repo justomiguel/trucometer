@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.globant.uicomponents.canvas;
+package com.globant.gj2framework.screens.uielements;
 
 /**
  *

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.globant.screens;
+package com.globant.gj2framework.screens;
 
 import javax.microedition.lcdui.Canvas;
 

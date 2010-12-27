@@ -4,7 +4,7 @@ import com.globant.models.Phone;
 import com.globant.parsers.xml.XmlNode;
 import com.globant.screens.GameCounterCanvas;
 import com.globant.screens.Menu;
-import com.globant.screens.ScreenManager;
+import com.globant.gj2framework.screens.ScreenManager;
 import com.globant.screens.UIOptions;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;

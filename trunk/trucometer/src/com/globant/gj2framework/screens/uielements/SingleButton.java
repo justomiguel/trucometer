@@ -2,15 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.globant.uicomponents.buttons;
-
-import com.globant.uicomponents.IScreenElement;
+package com.globant.gj2framework.screens.uielements;
 
 /**
  *
  * @author Miguel
  */
-public class SingleButton implements IScreenElement {
+public class SingleButton {
 
     public int xPercent;
     public int yPercent;

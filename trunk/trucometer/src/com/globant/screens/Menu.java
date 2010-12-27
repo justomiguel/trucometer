@@ -4,11 +4,13 @@
  */
 package com.globant.screens;
 
+import com.globant.gj2framework.screens.ScreenManager;
+import com.globant.gj2framework.screens.Screen;
 import com.globant.GameMidlet;
 import com.globant.models.Phone;
 import com.globant.models.screenstyles.generic.NG320x240;
-import com.globant.uicomponents.buttons.SingleButton;
-import com.globant.utils.ImageUtil;
+import com.globant.gj2framework.screens.uielements.SingleButton;
+import com.globant.gj2framework.utils.ImageUtil;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
