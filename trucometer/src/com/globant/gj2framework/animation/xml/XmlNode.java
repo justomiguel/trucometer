@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.globant.parsers.xml;
+package com.globant.gj2framework.animation.xml;
 
 import java.util.Enumeration;
 import java.util.Hashtable;

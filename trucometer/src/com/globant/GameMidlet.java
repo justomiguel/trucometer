@@ -1,7 +1,7 @@
 package com.globant;
 
 import com.globant.models.Phone;
-import com.globant.parsers.xml.XmlNode;
+import com.globant.gj2framework.animation.xml.XmlNode;
 import com.globant.screens.GameCounterCanvas;
 import com.globant.screens.Menu;
 import com.globant.gj2framework.screens.ScreenManager;
