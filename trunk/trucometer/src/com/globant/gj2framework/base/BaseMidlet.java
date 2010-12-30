@@ -5,6 +5,7 @@
 package com.globant.gj2framework.base;
 
 import com.globant.GameMidlet;
+import com.globant.gj2framework.screens.LabeledSplashScreen;
 import com.globant.gj2framework.screens.ScreenManager;
 import com.globant.models.Phone;
 import javax.microedition.lcdui.Display;
@@ -26,7 +27,17 @@ public class BaseMidlet extends MIDlet {
     // for the images position
     public Phone mobile;
 
+    // the loader
+    public LabeledSplashScreen loaderScreen;
+
+    private Thread loaderThread;
+
     public BaseMidlet() {
+
+        createLoader();
+        
+        Display.getDisplay(this).setCurrent(loaderScreen);
+
         this.screenManager = new ScreenManager(Display.getDisplay(this));
     }
 
@@ -52,6 +63,17 @@ public class BaseMidlet extends MIDlet {
         destroyApp(true);
     }
 
+    private void createLoader() {
+        loaderScreen = new LabeledSplashScreen();
+        this.loaderThread = new Thread(loaderScreen);
+        this.loaderThread.start();
+    }
+
+    protected void killLoader() {
+        loaderScreen.dispose();
+        loaderScreen = null;
+        loaderThread = null;
+    }
     
 
 

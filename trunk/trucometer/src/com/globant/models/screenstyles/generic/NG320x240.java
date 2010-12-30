@@ -16,6 +16,8 @@ import com.globant.utils.Item;
  * @author justo.vargas
  */
 public class NG320x240 extends Phone {
+    
+    
 
     public NG320x240() {
         super();
@@ -37,6 +39,10 @@ public class NG320x240 extends Phone {
 
         mainTitleHeight = 39;
         mainTitleWidth = 199;
+
+        fosforosUnderX = 155;
+        fosforosUnderY = 295;
+        fosforosDistance = 10;
 
     }
 

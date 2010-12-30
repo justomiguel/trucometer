@@ -60,6 +60,7 @@ public abstract class Phone {
 
     public  int fosforosUnderX;
     public  int fosforosUnderY;
+    public int fosforosDistance;
 
     public Phone() {
 

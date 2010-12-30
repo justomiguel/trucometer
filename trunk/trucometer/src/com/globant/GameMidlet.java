@@ -22,17 +22,30 @@ public class GameMidlet extends BaseMidlet {
         super();
         // set the instance to this
         instance = this;
-
-        // define the screens
-        this.screenManager.registerScreen(GameMidlet.SCREEN_MENU, new Menu());
-        this.screenManager.registerScreen(GameMidlet.SCREEN_OPT, new UIOptions());
-        this.screenManager.registerScreen(GameMidlet.SCREEN_GAME, new GameCounterCanvas());
-        
-        screenManager.changeScreen(SCREEN_MENU);
     }
 
     public void startApp() {
-        super.startApp();
+
+        if (!screenManager.initialized) {
+            // define the screens
+            loaderScreen.setProgress(99, 2);
+
+            this.screenManager.registerScreen(GameMidlet.SCREEN_MENU, new Menu());
+            this.screenManager.registerScreen(GameMidlet.SCREEN_OPT, new UIOptions());
+            this.screenManager.registerScreen(GameMidlet.SCREEN_GAME, new GameCounterCanvas());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                System.out.println(" sleeping ");
+            }
+            loaderScreen.setProgress(100, 1);
+
+            screenManager.changeScreen(SCREEN_MENU);
+            screenManager.initialized = true;
+
+            killLoader();
+        }
+        // do nothing come back from the pause state
     }
 
     public void pauseApp() {
@@ -42,5 +55,6 @@ public class GameMidlet extends BaseMidlet {
     public void dispose() {
         super.dispose();
     }
+
 
 }

@@ -30,10 +30,13 @@ public class ScreenManager {
     // pause state
     protected boolean onPause;
 
+    //
+    public boolean initialized;
+
     public ScreenManager(Display display) {
         this.screens = new Hashtable();
         this.display = display;
-        onPause = false;
+        initialized = onPause = false;
     }
 
     public void registerScreen(String name, Displayable screen) {
