@@ -32,38 +32,51 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     // referencias a los fosforos
     private Fosforos[] tantos = null;
     private Fosforos tantoTactil;
+
     // imagenes de tantos
     private Image IMAGE_UP;
     private Image IMAGE_DIAG;
     private Image IMAGE_SUP;
     private Image IMAGE_SDIAG;
+
     // background images
     private Image mainBackGround;
     private Image mainTitle;
+
     // para manejar los tantos
     private int tantoUSR;
     private int tantoRival;
+
     // image coordinates
     private int posXTantoTactil = 0;
     private int posYTantoTactil = 0;
+
     // screen size
     private int ancho;
     private int alto;
+
     // team players
     private String nombreTeamUsr;
     private String nombreTeamRival;
+
     // comandos
     private Command exitCommand;
+
     // fonts management
     private Font font = null;
+
     // configuration
     private Phone mobile;
+
     //manager for the animations
     private Timer timer;
+
     // my ticker
     private Marquesina ticker;
+
     // boolean vars
     private boolean isTactil;
+
     // boolean vars for giving points during the game
     private boolean givePoints;
     private boolean removingUsrPoints;
@@ -72,13 +85,17 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     // winning vars
     private int usrMatchesWin;
     private int rivalMatchesWin;
+
     // winner image
     private Image winnerImage;
+
     // when the game ends
     private boolean thereIsAWinner = false;
+
     // the winner's name an a legend
     private String winner;
     private String winnerLegend;
+    
     // if the current class is enabled
     private boolean enabled;
 
