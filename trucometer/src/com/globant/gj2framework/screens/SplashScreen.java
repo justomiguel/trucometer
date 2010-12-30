@@ -21,11 +21,34 @@ public class SplashScreen extends Canvas implements Runnable {
     //
     protected boolean isLoading;
 
+    //
+    protected int totalLoaded;
+    //
+    protected int initialLoad;
+    //
+    protected int duration;
+    //
+    protected int countToLoad;
+    //
+    protected int seconds;
+
     public SplashScreen(Image img) {
+        setFullScreenMode(true);
         this.img = img;
+        isLoading = true;
+        totalLoaded = 0;
+        duration = 0;
+        seconds = 0;
+        initialLoad = 0;
     }
 
     public SplashScreen() {
+        setFullScreenMode(true);
+        isLoading = true;
+        totalLoaded = 0;
+        duration = 0;
+        seconds = 0;
+        initialLoad = 0;
     }
 
     protected void paint(Graphics g) {
@@ -35,4 +58,14 @@ public class SplashScreen extends Canvas implements Runnable {
     public void run() {
 
     }
+
+    public void dispose(){
+        isLoading = false;
+    }
+
+    public boolean isIsLoading() {
+        return isLoading;
+    }
+
+    
 }

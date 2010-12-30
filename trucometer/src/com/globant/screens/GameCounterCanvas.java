@@ -4,7 +4,6 @@
  */
 package com.globant.screens;
 
-import com.globant.gj2framework.screens.ScreenManager;
 import com.globant.gj2framework.screens.Screen;
 import com.globant.GameMidlet;
 import com.globant.models.Phone;
@@ -77,7 +76,10 @@ public class GameCounterCanvas extends Screen implements CommandListener {
 
     // boolean vars
     private boolean isTactil;
+
+    // boolean vars for giving points during the game
     private boolean givePoints;
+    private boolean removingPoints;
 
     // winning vars
     private int usrMatchesWin;
@@ -96,7 +98,9 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     public GameCounterCanvas() {
 
         setFullScreenMode(true);
+
         enabled = true;
+
         ancho = this.getWidth();
         alto = this.getHeight();
 
@@ -174,6 +178,18 @@ public class GameCounterCanvas extends Screen implements CommandListener {
 
     protected void paint(Graphics g) {
         g.drawImage(mainBackGround, 0, 0, Graphics.TOP | Graphics.LEFT);
+
+        // dibuja varios fosforos
+        for (int i = 0; i < 12; i++) {
+            Image img = tantoTactil.getImg();
+            g.drawImage(img, mobile.fosforosUnderX + i * img.getWidth(), mobile.fosforosUnderY, Graphics.TOP | Graphics.LEFT);
+
+        }
+        for (int i = 0; i < 10; i++) {
+            Image img = tantoTactil.getImg();
+            g.drawImage(img, mobile.fosforosUnderX + mobile.fosforosDistance/2 + i * img.getWidth(), mobile.fosforosUnderY + 12, Graphics.TOP | Graphics.LEFT);
+        }
+
         g.setColor(0xFFFFFF);
         g.drawRect(0, 0, this.ancho - 1, this.alto - 1);
         //g.drawImage(background, 0, 0, Graphics.TOP | Graphics.LEFT);
@@ -228,16 +244,7 @@ public class GameCounterCanvas extends Screen implements CommandListener {
             g.drawImage(tantoTactil.getShadow(), posXTantoTactil - 2, posYTantoTactil + 3, Graphics.TOP | Graphics.LEFT);
             g.drawImage(tantoTactil.getImg(), posXTantoTactil, posYTantoTactil, Graphics.TOP | Graphics.LEFT);
         }
-        // dibuja varios fosforos
-        for (int i = 0; i < 12; i++) {
-            Image img = tantoTactil.getImg();
-            g.drawImage(img, mobile.fosforosUnderX + i * img.getWidth(), mobile.fosforosUnderY, Graphics.TOP | Graphics.LEFT);
-
-        }
-        for (int i = 0; i < 10; i++) {
-            Image img = tantoTactil.getImg();
-            g.drawImage(img, mobile.fosforosUnderX + 8 + i * img.getWidth(), mobile.fosforosUnderY + 14, Graphics.TOP | Graphics.LEFT);
-        }
+        
 
         if (thereIsAWinner) {
             g.drawImage(winnerImage, 0, 0, Graphics.TOP | Graphics.LEFT);
@@ -531,13 +538,11 @@ public class GameCounterCanvas extends Screen implements CommandListener {
 
     private void setScreenConfig() {
         // set the buttons according to this screen;
-        if (isTactil) {
             SingleButton button;
             for (int i = 0; i < mobile.game_botones.length; i++) {
                 button = mobile.game_botones[i];
                 button.updateSize(alto, ancho);
             }
-        }
         mobile.separate = mobile.separate * alto / 100;
     }
 

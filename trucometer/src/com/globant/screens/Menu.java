@@ -23,19 +23,14 @@ public class Menu extends Screen {
 
     // main image
     private Image mainTitle = null;
-
     // an int to know the current selection
     private int selectedOption = 1;
-
     // the game to lunch
     private GameCounterCanvas gameCanvas;
-
     // preferences
     private UIOptions preferences;
-
     // if the phone is a touch one this var is going to be true
     private boolean isTactil;
-
     // configuration file
     private Phone mobile;
 
@@ -52,19 +47,20 @@ public class Menu extends Screen {
 
     protected void paint(Graphics g) {
         // dibujo la imagen del titulo
-        g.drawImage(mainTitle, mobile.menu_backGround.x, mobile.menu_backGround.y, Graphics.TOP | Graphics.LEFT);
-
-        g.setColor(0xFFFFFF);
-        // dibujo recuadros interiores
-        for (int i = 0; i < mobile.menu_botones.length; i++) {
-            SingleButton object = mobile.menu_botones[i];
-            if (object.seleccionado) {
-                g.setColor(object.colorSeleccionado);
-            } else {
-                g.setColor(object.color);
+        if (mobile != null) {
+            g.drawImage(mainTitle, mobile.menu_backGround.x, mobile.menu_backGround.y, Graphics.TOP | Graphics.LEFT);
+            g.setColor(0xFFFFFF);
+            // dibujo recuadros interiores
+            for (int i = 0; i < mobile.menu_botones.length; i++) {
+                SingleButton object = mobile.menu_botones[i];
+                if (object.seleccionado) {
+                    g.setColor(object.colorSeleccionado);
+                } else {
+                    g.setColor(object.color);
+                }
+                g.setStrokeStyle(1);
+                g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
             }
-            g.setStrokeStyle(1);
-            g.drawRect(object.xPercent, object.yPercent, object.anchoPercent, object.largoPercent);
         }
 
     }
@@ -135,7 +131,7 @@ public class Menu extends Screen {
             case 2:
                 break;
             case 3:
-                 ((GameMidlet) GameMidlet.instance).dispose();
+                ((GameMidlet) GameMidlet.instance).dispose();
                 break;
         }
     }
@@ -147,7 +143,7 @@ public class Menu extends Screen {
     }
 
     private void defineModel() {
-        
+
         mobile = new NG320x240();
         // update the configuration var
         GameMidlet.instance.mobile = mobile;
@@ -156,18 +152,15 @@ public class Menu extends Screen {
         int ancho = this.getWidth();
         int alto = this.getHeight();
 
-        if (isTactil) {
-            SingleButton button;
-            for (int i = 0; i < mobile.menu_botones.length; i++) {
-                button = mobile.menu_botones[i];
-                button.updateSize(alto, ancho);
-            }
+        SingleButton button;
+        for (int i = 0; i < mobile.menu_botones.length; i++) {
+            button = mobile.menu_botones[i];
+            button.updateSize(alto, ancho);
         }
     }
 
     public void run() {
     }
-
 
     // pointer events
     protected void pointerPressed(int x, int y) {
@@ -186,14 +179,14 @@ public class Menu extends Screen {
             //lamo al juego
             GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
         } else if (mobile.menu_botones[2].hitTestPoint(x, y)) {
-              ((GameMidlet) GameMidlet.instance).dispose();
+            ((GameMidlet) GameMidlet.instance).dispose();
         }
         repaint();
 
     }
 
     // kill this class
-        public void dispose() {
+    public void dispose() {
         gameCanvas = null;
         preferences = null;
         mobile = null;
