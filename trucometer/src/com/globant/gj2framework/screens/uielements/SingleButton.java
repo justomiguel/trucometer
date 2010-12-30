@@ -39,8 +39,13 @@ public class SingleButton {
     }
 
     public boolean hitTestPoint(int x, int y) {
-        boolean hitOnX = ((x > this.xPercent) && (x < (this.xPercent + this.anchoPercent)));
-        boolean hitOnY = ((y > this.yPercent) && (y < (this.yPercent + this.largoPercent)));
+        System.out.println(x+" y: "+y);
+        System.out.println(xPercent + " yBoton: "+yPercent);
+        System.out.println(largoPercent + " ancho: "+anchoPercent);
+        boolean hitOnX = ((x > xPercent) && (x < (xPercent + this.anchoPercent)));
+        System.out.println(hitOnX);
+        boolean hitOnY = ((y > yPercent) && (y < (yPercent + this.largoPercent)));
+        System.out.println(hitOnY);
         return hitOnX && hitOnY;
     }
 

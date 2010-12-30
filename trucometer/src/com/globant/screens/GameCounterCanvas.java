@@ -32,54 +32,42 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     // referencias a los fosforos
     private Fosforos[] tantos = null;
     private Fosforos tantoTactil;
-
     // imagenes de tantos
     private Image IMAGE_UP;
     private Image IMAGE_DIAG;
     private Image IMAGE_SUP;
     private Image IMAGE_SDIAG;
-
     // background images
     private Image mainBackGround;
     private Image mainTitle;
-
     // para manejar los tantos
     private int tantoUSR;
     private int tantoRival;
-
     // image coordinates
     private int posXTantoTactil = 0;
     private int posYTantoTactil = 0;
-
     // screen size
     private int ancho;
     private int alto;
-
     // team players
     private String nombreTeamUsr;
     private String nombreTeamRival;
-
     // comandos
     private Command exitCommand;
-    
     // fonts management
     private Font font = null;
-
     // configuration
     private Phone mobile;
-
     //manager for the animations
     private Timer timer;
-
     // my ticker
     private Marquesina ticker;
-
     // boolean vars
     private boolean isTactil;
-
     // boolean vars for giving points during the game
     private boolean givePoints;
-    private boolean removingPoints;
+    private boolean removingUsrPoints;
+    private boolean removingRivalPoints;
 
     // winning vars
     private int usrMatchesWin;
@@ -91,7 +79,6 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     // the winner's name an a legend
     private String winner;
     private String winnerLegend;
-    
     // if the current class is enabled
     private boolean enabled;
 
@@ -104,36 +91,55 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         ancho = this.getWidth();
         alto = this.getHeight();
 
-        // set commands
-        // add commands
-        exitCommand = new Command("Go Back", Command.EXIT, 0);
-        this.addCommand(exitCommand);
-        this.setCommandListener(this);
-
         // get config
         mobile = GameMidlet.instance.mobile;
         isTactil = hasPointerEvents();
+
         // create images
         createImages();
+
         // set config according the screen size
         setScreenConfig();
 
-          // generar Timer
+        if (!isTactil) {
+            // set commands
+            // add commands
+            exitCommand = new Command("Go Back", Command.EXIT, 0);
+            this.addCommand(exitCommand);
+            this.setCommandListener(this);
+        }
+
+        // generar Timer
         timer = new Timer();
 
         // generar ticker
         ticker = new Marquesina(mobile.game_stringsPosition[0].name, 0, mobile.game_stringsPosition[0].yPercent * this.alto / 100);
         timer.scheduleAtFixedRate(ticker, 0, 40);
-        
+
+        removingRivalPoints = false;
+        removingUsrPoints = false;
+        givePoints = false;
     }
 
     protected void pointerPressed(int x, int y) {
         if (enabled) {
             if (mobile.game_botones[0].hitTestPoint(x, y)) {
-                    mobile.game_botones[0].seleccionado = true;
+                mobile.game_botones[0].seleccionado = true;
             } else if (x > mobile.fosforosUnderX && x < this.ancho) {
                 if (y > mobile.fosforosUnderY) {
                     givePoints = true;
+                }
+            } else if (mobile.game_botones[1].hitTestPoint(x, y)) {
+                // se quiere quitar tantos al usr
+                if (tantoUSR > 0) {
+                    removingUsrPoints = true;
+                    tantoUSR--;
+                }
+            } else if (mobile.game_botones[2].hitTestPoint(x, y)) {
+                // se quiere quitar tantos al rival
+                if (tantoRival > 0) {
+                    removingRivalPoints = true;
+                    tantoRival--;
                 }
             }
         }
@@ -143,34 +149,47 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     protected void pointerReleased(int x, int y) {
         if (enabled) {
             if (mobile.game_botones[0].hitTestPoint(x, y)) {
-                GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
-                mobile.game_botones[0].seleccionado = false;
+                if (mobile.game_botones[0].seleccionado) {
+                    GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
+                    mobile.game_botones[0].seleccionado = false;
+                }
             } else {
                 if (givePoints) {
                     if (mobile.game_botones[1].hitTestPoint(x, y)) {
-                            if (tantoUSR < 15) {
-                                tantoUSR++;
-                            }
+                        if (tantoUSR < 15) {
+                            tantoUSR++;
+                        }
                     } else if (mobile.game_botones[2].hitTestPoint(x, y)) {
-                            if (tantoRival < 15) {
-                                tantoRival++;
-                            }
+                        if (tantoRival < 15) {
+                            tantoRival++;
+                        }
                     }
                     givePoints = false;
-                    posXTantoTactil = -tantoTactil.getWidth();
-                    posYTantoTactil = -tantoTactil.getHeight();
+                } else if (removingRivalPoints) {
+                    // si el usr tira el fosforo en la caja de su equipo no se desceunta el punto
+                    if (mobile.game_botones[2].hitTestPoint(x, y)) {
+                            tantoRival++;
+                    }
+                    removingRivalPoints = false;
+                } else if (removingUsrPoints) {
+                    if (mobile.game_botones[1].hitTestPoint(x, y)) {
+                            tantoUSR++;
+                    }
+                    removingUsrPoints = false;
                 }
+                posXTantoTactil = -tantoTactil.getWidth();
+                posYTantoTactil = -tantoTactil.getHeight();
             }
         } else {
-                thereIsAWinner = false;
-                enabled = true;
+            thereIsAWinner = false;
+            enabled = true;
         }
         // me tengo que fijar donde deja el loco
         repaint();
     }
 
     protected void pointerDragged(int x, int y) {
-        if (givePoints) {
+        if ((givePoints) || (removingRivalPoints) || (removingUsrPoints)) {
             posXTantoTactil = x;
             posYTantoTactil = y;
         }
@@ -187,7 +206,7 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         }
         for (int i = 0; i < 10; i++) {
             Image img = tantoTactil.getImg();
-            g.drawImage(img, mobile.fosforosUnderX + mobile.fosforosDistance/2 + i * img.getWidth(), mobile.fosforosUnderY + 12, Graphics.TOP | Graphics.LEFT);
+            g.drawImage(img, mobile.fosforosUnderX + mobile.fosforosDistance / 2 + i * img.getWidth(), mobile.fosforosUnderY + 12, Graphics.TOP | Graphics.LEFT);
         }
 
         g.setColor(0xFFFFFF);
@@ -237,16 +256,17 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         g.drawString(nombreTeamUsr, mobile.game_stringsPosition[1].xPercent * this.ancho / 100, mobile.game_stringsPosition[1].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(nombreTeamRival, mobile.game_stringsPosition[2].xPercent * this.ancho / 100, mobile.game_stringsPosition[2].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(mobile.game_stringsPosition[3].name, mobile.game_stringsPosition[3].xPercent * this.ancho / 100, mobile.game_stringsPosition[3].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamUsr + "  "+usrMatchesWin, mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
-        g.drawString(nombreTeamRival +"  "+ rivalMatchesWin, mobile.game_stringsPosition[5].xPercent * this.ancho / 100, mobile.game_stringsPosition[5].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamUsr + "  " + usrMatchesWin, mobile.game_stringsPosition[4].xPercent * this.ancho / 100, mobile.game_stringsPosition[4].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
+        g.drawString(nombreTeamRival + "  " + rivalMatchesWin, mobile.game_stringsPosition[5].xPercent * this.ancho / 100, mobile.game_stringsPosition[5].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
         g.drawString(mobile.game_stringsPosition[6].name, mobile.game_stringsPosition[6].xPercent * this.ancho / 100, mobile.game_stringsPosition[6].yPercent * this.alto / 100, Graphics.TOP | Graphics.LEFT);
-        if (givePoints) {
+
+        if ((givePoints) || (removingRivalPoints) || (removingUsrPoints)) {
             g.drawImage(tantoTactil.getShadow(), posXTantoTactil - 2, posYTantoTactil + 3, Graphics.TOP | Graphics.LEFT);
             g.drawImage(tantoTactil.getImg(), posXTantoTactil, posYTantoTactil, Graphics.TOP | Graphics.LEFT);
         }
-        
 
         if (thereIsAWinner) {
+
             g.drawImage(winnerImage, 0, 0, Graphics.TOP | Graphics.LEFT);
             g.setColor(0x000000);
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_ITALIC, Font.SIZE_SMALL));
@@ -254,14 +274,17 @@ public class GameCounterCanvas extends Screen implements CommandListener {
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_BOLD, Font.SIZE_SMALL));
             g.drawString("vs", 85, 218, Graphics.TOP | Graphics.LEFT);
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_ITALIC, Font.SIZE_SMALL));
-            if (winner.equals(nombreTeamUsr)){
+
+            if (winner.equals(nombreTeamUsr)) {
                 g.drawString(nombreTeamRival, 115, 229, Graphics.TOP | Graphics.LEFT);
             } else {
                 g.drawString(nombreTeamUsr, 115, 229, Graphics.TOP | Graphics.LEFT);
             }
+
             g.setFont(Font.getFont(Font.FACE_MONOSPACE, Font.STYLE_BOLD, Font.SIZE_SMALL));
-            g.drawString(winnerLegend,70, 251, Graphics.TOP | Graphics.LEFT);
+            g.drawString(winnerLegend, 70, 251, Graphics.TOP | Graphics.LEFT);
             enabled = false;
+
         }
     }
 
@@ -327,15 +350,15 @@ public class GameCounterCanvas extends Screen implements CommandListener {
     }
 
     public void commandAction(Command c, Displayable d) {
-            if (c == exitCommand) {
-                if (enabled){
-                    GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
-                } else {
-                    // remove the winner image and continue
-                    thereIsAWinner = false;
-                    enabled = true;
-                }
+        if (c == exitCommand) {
+            if (enabled) {
+                GameMidlet.instance.changeScreen(GameMidlet.SCREEN_OPT);
+            } else {
+                // remove the winner image and continue
+                thereIsAWinner = false;
+                enabled = true;
             }
+        }
     }
 
     private void createImages() {
@@ -417,7 +440,6 @@ public class GameCounterCanvas extends Screen implements CommandListener {
         }
     }
 
-
     public void init() {
 
         // the names of the teams
@@ -437,14 +459,12 @@ public class GameCounterCanvas extends Screen implements CommandListener {
 
     public void stop() {
         super.stop();
-       // dispose();
+        // dispose();
     }
-    
-    public void reset(){
+
+    public void reset() {
         super.reset();
     }
-
-
 
     private void drawFosforos(Graphics g) {
 
@@ -538,20 +558,20 @@ public class GameCounterCanvas extends Screen implements CommandListener {
 
     private void setScreenConfig() {
         // set the buttons according to this screen;
-            SingleButton button;
-            for (int i = 0; i < mobile.game_botones.length; i++) {
-                button = mobile.game_botones[i];
-                button.updateSize(alto, ancho);
-            }
+        SingleButton button;
+        for (int i = 0; i < mobile.game_botones.length; i++) {
+            button = mobile.game_botones[i];
+            button.updateSize(alto, ancho);
+        }
         mobile.separate = mobile.separate * alto / 100;
     }
 
     private void setWinner(String string) {
         winner = string;
-        if (winner.equals(nombreTeamUsr)){;
-            winnerLegend = "Por "+tantoUSR+" a "+tantoRival;
+        if (winner.equals(nombreTeamUsr)) {
+            winnerLegend = "Por " + tantoUSR + " a " + tantoRival;
         } else {
-            winnerLegend = "Por "+tantoRival+" a "+tantoUSR;
+            winnerLegend = "Por " + tantoRival + " a " + tantoUSR;
         }
         thereIsAWinner = true;
         tantoUSR = 0;

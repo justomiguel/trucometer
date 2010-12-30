@@ -59,7 +59,7 @@ public class NG320x240 extends Phone {
        SingleButton[] result = {new SingleButton(0,90,50,11,0x009900,0xFFFF99),
        // separaion de canchas
        new SingleButton(0,26,50,50,0x009900,0xFFFF99),
-       new SingleButton(50,26,50,50,0x009900,0xFFFF99)};
+       new SingleButton(51,26,49,50,0x009900,0xFFFF99)};
         return result;
     }
 

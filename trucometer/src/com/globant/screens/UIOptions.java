@@ -30,22 +30,17 @@ public class UIOptions extends Screen implements CommandListener {
 
     // the background image
     public Image options;
-
     // if the mobile has a touch screen
     private boolean isTactil;
-
     // combos for the input of the usr and rival names
     private ComboBox textFieldUSR;
     private ComboBox textFieldRival;
-
     // strings for the combos inputs
     private CanvasString usrTeam;
     private CanvasString rivalTeam;
-
     // comandos
     private Command exitCommand;
     private Command playGameCommand;
-
     // screen size
     private int ancho;
     private int alto;
@@ -68,13 +63,14 @@ public class UIOptions extends Screen implements CommandListener {
         } catch (IOException ex) {
         }
 
-        setCommandListener(this);
+        if (!isTactil) {
+            exitCommand = new Command("Exit", Command.EXIT, 0);
+            playGameCommand = new Command("Play!", Command.SCREEN, 1);
 
-        exitCommand = new Command("Exit", Command.EXIT, 0);
-        playGameCommand = new Command("Play!", Command.SCREEN, 1);
-
-        this.addCommand(exitCommand);
-        this.addCommand(playGameCommand);
+            this.addCommand(exitCommand);
+            this.addCommand(playGameCommand);
+            setCommandListener(this);
+        }
 
         //TODO: hay que hacer un metodo init asi puedo llamar al destroy yPercent liberar objetos de memoria
 
@@ -135,8 +131,12 @@ public class UIOptions extends Screen implements CommandListener {
     }
 
     public void dispose() {
-        this.removeCommand(exitCommand);
-        this.removeCommand(playGameCommand);
+        if (exitCommand != null) {
+            this.removeCommand(exitCommand);
+        }
+        if (playGameCommand != null) {
+            this.removeCommand(playGameCommand);
+        }
     }
 
     /*
