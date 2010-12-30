@@ -41,6 +41,8 @@ public class UIOptions extends Screen implements CommandListener {
     // comandos
     private Command exitCommand;
     private Command playGameCommand;
+    private Command changeUsrNameCommand;
+    private Command changeRvlNameCommand;
     // screen size
     private int ancho;
     private int alto;
@@ -64,12 +66,19 @@ public class UIOptions extends Screen implements CommandListener {
         }
 
         if (!isTactil) {
+
             exitCommand = new Command("Exit", Command.EXIT, 0);
             playGameCommand = new Command("Play!", Command.SCREEN, 1);
+            changeUsrNameCommand = new Command("Change Usr Name!", Command.ITEM, 1);
+            changeRvlNameCommand = new Command("Change Rvl Name!", Command.ITEM, 1);
 
             this.addCommand(exitCommand);
             this.addCommand(playGameCommand);
+            this.addCommand(changeRvlNameCommand);
+            this.addCommand(changeUsrNameCommand);
+
             setCommandListener(this);
+
         }
 
         //TODO: hay que hacer un metodo init asi puedo llamar al destroy yPercent liberar objetos de memoria
@@ -121,6 +130,10 @@ public class UIOptions extends Screen implements CommandListener {
             //lamo al juego
             GameMidlet.instance.mobile.opciones_botones[2].seleccionado = false;
             GameMidlet.instance.changeScreen(GameMidlet.SCREEN_MENU);
+        } else if (c == changeRvlNameCommand) {
+            changeRivalName();
+        } else if (c == changeUsrNameCommand) {
+            changeUsrName();
         }
     }
 
@@ -158,21 +171,27 @@ public class UIOptions extends Screen implements CommandListener {
         repaint();
     }
 
+    public void changeRivalName() {
+        textFieldRival.setString(rivalTeam.name);
+        // call directly to the screen
+        Display.getDisplay(GameMidlet.instance).setCurrent(textFieldRival);
+    }
+
+    public void changeUsrName() {
+        textFieldUSR.setString(usrTeam.name);
+        // call directly to the screen
+        Display.getDisplay(GameMidlet.instance).setCurrent(textFieldUSR);
+    }
+
     protected void pointerReleased(int x, int y) {
         if (GameMidlet.instance.mobile.opciones_botones[0].hitTestPoint(x, y)) {
             //lamo al juego
             GameMidlet.instance.mobile.opciones_botones[0].seleccionado = false;
-            textFieldUSR.setString(usrTeam.name);
-
-            // call directly to the screen
-            Display.getDisplay(GameMidlet.instance).setCurrent(textFieldUSR);
+            changeUsrName();
 
         } else if (GameMidlet.instance.mobile.opciones_botones[1].hitTestPoint(x, y)) {
             GameMidlet.instance.mobile.opciones_botones[1].seleccionado = false;
-            textFieldRival.setString(rivalTeam.name);
-
-            // call directly to the screen
-            Display.getDisplay(GameMidlet.instance).setCurrent(textFieldRival);
+            changeRivalName();
 
         } else if (GameMidlet.instance.mobile.opciones_botones[2].hitTestPoint(x, y)) {
             //lamo al juego
