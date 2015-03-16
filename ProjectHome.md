@@ -1,0 +1,1 @@
+la idea es contar tantos para el truco y despues hacer la conexion con facebook
